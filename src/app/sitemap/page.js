@@ -342,7 +342,7 @@ const SitemapPage = () => {
                     <div className="max-w-4xl mx-auto text-center">
                         <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-3xl p-12 text-white shadow-2xl">
                             <Heart className="w-16 h-16 mx-auto mb-6 opacity-90" />
-                            <h2 className="text-4xl font-bold mb-4">Can't Find What You Need?</h2>
+                            <h2 className="text-4xl font-bold mb-4">Can&apos;t Find What You Need?</h2>
                             <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
                                 Our support team is always ready to help you navigate and find exactly what you&apos;re looking for.
                             </p>

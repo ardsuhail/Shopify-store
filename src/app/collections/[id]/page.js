@@ -63,7 +63,7 @@ export default async function CollectionPage({ params }) {
                         <div className="text-center py-16">
                             <div className="text-6xl mb-4">📦</div>
                             <h3 className="text-2xl font-bold text-gray-800 mb-2">No Products Found</h3>
-                            <p className="text-gray-600 mb-6">This collection doesn't have any products yet.</p>
+                            <p className="text-gray-600 mb-6">This collection doesn&apos;t have any products yet.</p>
                             <Link
                                 href="/collections"
                                 className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-full font-semibold transition-colors duration-300 inline-flex items-center gap-2"
@@ -158,7 +158,7 @@ export default async function CollectionPage({ params }) {
                 <div className="container mx-auto px-6 text-center">
                     <h2 className="text-3xl font-bold mb-4">Love This Collection?</h2>
                     <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-                        Explore more amazing collections and find exactly what you're looking for.
+                        Explore more amazing collections and find exactly what you&apos;re looking for.
                     </p>
                     <div className="flex flex-wrap justify-center gap-6">
                         <Link 

@@ -273,7 +273,7 @@ We recommend reviewing these terms periodically.`
             </div>
             <h2 className="text-3xl font-bold mb-4">Questions About Our Terms?</h2>
             <p className="text-xl mb-8 opacity-90">
-              We're here to clarify any questions you may have
+              We&apos;re here to clarify any questions you may have
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6">

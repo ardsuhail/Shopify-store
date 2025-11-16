@@ -257,7 +257,7 @@ const SearchResultsPage = () => {
                     <div className="flex flex-col sm:flex-row items-center justify-between">
                         <div className='relative right-16 sm:right-0 mb-6 sm:mb-0'>
                             <h1 className="text-2xl font-bold text-gray-900">
-                                Results for "{searchQuery}"
+                                Results for &quot;{searchQuery}&quot;
                             </h1>
                             <p className="text-gray-600 mt-1">
                                 {filteredProducts.length} products found

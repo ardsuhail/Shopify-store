@@ -460,7 +460,7 @@ fetch("/api/query", requestOptions)
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold mb-6">Still Have Questions?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-            Don't hesitate to reach out. Our team is always here to help you with any questions or concerns.
+            Don&apos;t hesitate to reach out. Our team is always here to help you with any questions or concerns.
           </p>
           <div className="flex flex-wrap justify-center gap-6">
             <Link 

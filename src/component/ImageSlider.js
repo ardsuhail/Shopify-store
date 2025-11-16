@@ -18,11 +18,7 @@ const ImageSlider = ({ ProductImages, product }) => {
     const nextSlide = () => setCurrent((prev) => (prev + 1) % length)
     const prevSlide = () => setCurrent((prev) => (prev - 1 + length) % length)
 
-    const handleAddToCart = () => {
-        if (product) {
-            addToCart(product);
-        }
-    }
+ 
 
     // ✅ Fixed wishlist fetch - Tumhare API structure ke hisab se
     useEffect(() => {
@@ -44,6 +40,7 @@ const ImageSlider = ({ ProductImages, product }) => {
                 setError("Failed to load wishlist");
             });
     }, []);
+    
 
     // ✅ Fixed like function
     const handleLike = async () => {

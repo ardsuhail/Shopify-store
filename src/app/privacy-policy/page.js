@@ -243,7 +243,7 @@ Any changes will be posted here with an updated effective date. We encourage you
             <Mail className="w-16 h-16 mx-auto mb-6 opacity-90" />
             <h2 className="text-3xl font-bold mb-4">Questions About Your Privacy?</h2>
             <p className="text-xl mb-8 opacity-90">
-              We're here to help you understand how we protect your data
+              We&apos;re here to help you understand how we protect your data
             </p>
             <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-8">
               <p className="text-2xl font-semibold mb-2">shopovixstore@gmail.com</p>

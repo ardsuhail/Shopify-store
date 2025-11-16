@@ -198,7 +198,7 @@ const AboutPage = () => {
               What Makes Us <span className="text-emerald-600">Different?</span>
             </h2>
             <p className="text-lg text-gray-600 mb-12 leading-relaxed">
-              While big stores focus on volume, we focus on value. Here's how we stand out:
+              While big stores focus on volume, we focus on value. Here&apos;s how we stand out:
             </p>
 
             <div className="grid md:grid-cols-3 gap-8 text-left">
@@ -257,7 +257,7 @@ const AboutPage = () => {
       {/* Connect Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">Let's Build Something Amazing Together</h2>
+          <h2 className="text-4xl font-bold text-gray-800 mb-4">Let&apos;s Build Something Amazing Together</h2>
           <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
             We&apos;re not just an online store - we&apos;re building a community of smart, modern shoppers.
           </p>

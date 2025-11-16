@@ -279,7 +279,7 @@ const [productRatings, setProductRatings] = useState({});
           {loading ? (
             <div className="col-span-2 lg:col-span-4 flex flex-col justify-center items-center">
               <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-500 text-sm mt-2">We're fetching collections..</p>
+              <p className="text-gray-500 text-sm mt-2">We&apos;re fetching collections..</p>
             </div>
           ) : (
             <>
@@ -418,7 +418,7 @@ const [productRatings, setProductRatings] = useState({});
         <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
           Trending Now
         </h2>
-        <p className="text-gray-600 text-lg font-light">Discover what's captivating our community</p>
+        <p className="text-gray-600 text-lg font-light">Discover what&apos;s captivating our community</p>
       </div>
 
       {loading ? (
@@ -677,7 +677,7 @@ const [productRatings, setProductRatings] = useState({});
 
                 {/* Comment */}
                 <p className="text-gray-200 leading-relaxed mb-6 italic">
-                  "{testimonial.comment}"
+                  &quot;{testimonial.comment}&quot;
                 </p>
 
                 {/* User Info */}

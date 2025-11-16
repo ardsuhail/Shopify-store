@@ -544,7 +544,7 @@ export default function ProductsPage() {
       {/* CTA Section */}
       <section className="py-8 md:py-12 lg:py-16 bg-gradient-to-r from-gray-900 to-black text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4">Can't Find What You're Looking For?</h2>
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4">Can&apos;t Find What You&apos;re Looking For?</h2>
           <p className="text-sm md:text-base lg:text-lg mb-4 md:mb-6 lg:mb-8 opacity-90 max-w-2xl mx-auto">
             Our product collection is constantly updated with new arrivals. Contact us for special requests!
           </p>

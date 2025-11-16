@@ -254,7 +254,7 @@ const OrdersPage = () => {
             <Crown className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           </div>
           <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Loading Your Orders</h3>
-          <p className="text-gray-600 text-sm sm:text-base">We're preparing your order history...</p>
+          <p className="text-gray-600 text-sm sm:text-base">We&apos;re preparing your order history...</p>
         </div>
       </div>
     );

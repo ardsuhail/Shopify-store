@@ -142,7 +142,7 @@ export default function Wishlist() {
             <div className="text-center">
               <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
               <p className="text-gray-600 text-lg">Loading your wishlist...</p>
-              <p className="text-gray-500 text-sm mt-2">We're fetching your saved items</p>
+              <p className="text-gray-500 text-sm mt-2">We&apos;re fetching your saved items</p>
             </div>
           </div>
         </div>
