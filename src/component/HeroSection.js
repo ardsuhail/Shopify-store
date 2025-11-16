@@ -1,0 +1,99 @@
+"use client"
+import React, { useEffect, useState } from 'react'
+
+const HeroSection = () => {
+  const [bannerData, setBannerData] = useState([])
+  const [current, setCurrent] = useState(0)
+ //create a filter for isactive weather a baner is active or not active with true false
+   
+
+  
+  useEffect(() => {
+    fetch('/api/banner')
+      .then(res => res.json())
+      .then(data => {
+         const activeBanners = (data.banner || []).filter(
+          (item) => item.isActive === true
+        );
+        setBannerData(activeBanners)
+
+      })
+      .catch(err => console.log(err))
+  }, [])
+
+  const imagesLength = bannerData.length
+
+  const nextSlide = () => {
+    setCurrent((prev) => (prev + 1) % imagesLength)
+  }
+
+  const prevSlide = () => {
+    setCurrent((prev) => (prev - 1 + imagesLength) % imagesLength)
+  }
+ 
+
+    // 🕒 Auto Slide Effect
+  useEffect(() => {
+    if (imagesLength > 1) {
+      const interval = setInterval(() => {
+        nextSlide()
+      }, 3000) // har 3 second me slide change hoga
+      return () => clearInterval(interval)
+    }
+  }, [imagesLength])
+  return (
+    <section className="relative hero w-full overflow-hidden">
+      {/* Image wrapper */}
+      <div
+        className="flex transition-transform duration-700 ease-in-out"
+        style={{ transform: `translateX(-${current * 100}%)` }}
+      >
+        {bannerData.map((item, index) => (
+          <div
+            key={index}
+            className="w-full flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-white"
+          >
+            <img
+              src={item.images || "/banner.png"}
+              alt={item.altText || "banner"}
+              className="w-full h-auto object-contain"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Prev/Next buttons */}
+      {imagesLength > 1 && (
+        <>
+          <button
+            onClick={prevSlide}
+            className="absolute top-1/2 left-3 -translate-y-1/2 bg-white/80 p-2 sm:p-3 rounded-full hover:bg-white shadow-md z-10"
+          >
+            <img src="/previous.svg" alt="Previous" className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="absolute top-1/2 right-3 -translate-y-1/2 bg-white/80 p-2 sm:p-3 rounded-full hover:bg-white shadow-md z-10"
+          >
+            <img src="/nextimage.svg" alt="Next" className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+        </>
+      )}
+
+      {/* Dots indicator */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {bannerData.map((_, index) => (
+          <span
+            key={index}
+            onClick={() => setCurrent(index)}
+            className={`w-3 h-3 rounded-full cursor-pointer transition-all duration-300 ${index === current ? "bg-purple-600 scale-110" : "bg-gray-400"
+              }`}
+          ></span>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+export default HeroSection

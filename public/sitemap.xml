@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Home -->
+  <url>
+    <loc>https://www.shopovix.store/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Static Pages -->
+  <url><loc>https://www.shopovix.store/about</loc></url>
+  <url><loc>https://www.shopovix.store/contact</loc></url>
+  <url><loc>https://www.shopovix.store/faqs</loc></url>
+  <url><loc>https://www.shopovix.store/login</loc></url>
+  <url><loc>https://www.shopovix.store/shipping-info</loc></url>
+  <url><loc>https://www.shopovix.store/payment-options</loc></url>
+  <url><loc>https://www.shopovix.store/privacy-policy</loc></url>
+  <url><loc>https://www.shopovix.store/return-refund-policy</loc></url>
+  <url><loc>https://www.shopovix.store/terms-&-conditions</loc></url>
+
+
+
+  <!-- Collections Page -->
+  <url><loc>https://www.shopovix.store/collections</loc></url>
+
+  <!-- Products Page -->
+  <url><loc>https://www.shopovix.store/products</loc></url>
+
+  <!-- Dynamic Collections (example IDs) -->
+  <!-- <url><loc>https://www.shopovix.store/collections/314333102268</loc></url> -->
+
+  <!-- Dynamic Products (example IDs) -->
+  <!-- <url><loc>https://www.shopovix.store/products/8923233878204</loc></url> -->
+
+</urlset>

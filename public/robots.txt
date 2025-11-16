@@ -1,0 +1,38 @@
+User-agent: *
+# Allow full website crawling
+Allow: /
+
+# Block private/admin routes
+Disallow: /admin/
+Disallow: /admin
+
+# Block checkout & cart pages (not useful for SEO)
+Disallow: /checkout
+Disallow: /checkout/
+Disallow: /cart
+Disallow: /cart/
+
+# Block API routes (Google ko API pages crawl nahi karne chahiye)
+Disallow: /api/
+Disallow: /api
+
+# Block dynamic search results (avoid duplicate content)
+Disallow: /search-result
+Disallow: /search-result/
+
+# Block Next.js internal files
+Disallow: /_next/
+Disallow: /_next/static/
+Disallow: /_next/image/
+
+# Block build output files
+Disallow: /server/
+Disallow: /server/
+
+# Block temporary or test pages
+Disallow: /test
+Disallow: /temp
+Disallow: /draft
+
+# Your sitemap
+Sitemap: https://www.shopovix.store/sitemap.xml

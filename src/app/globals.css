@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/* If using custom CSS, add these styles */
+.profile-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.profile-card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+@keyframes marquee-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-infinite {
+  animation: marquee-infinite 40s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+.animate-marquee-infinite:hover {
+  animation-play-state: paused;
+}
+
+/* Responsive speeds */
+@media (max-width: 1024px) {
+  .animate-marquee-infinite {
+    animation-duration: 35s;
+  }
+}
+
+@media (max-width: 768px) {
+  .animate-marquee-infinite {
+    animation-duration: 30s;
+  }
+}
+
+@media (max-width: 480px) {
+  .animate-marquee-infinite {
+    animation-duration: 25s;
+  }
+}
