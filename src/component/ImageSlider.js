@@ -1,3 +1,4 @@
+
 "use client"
 import React from 'react'
 import { useState, useEffect } from 'react'
@@ -7,31 +8,22 @@ import { ShoppingCart, Heart } from 'lucide-react'
 
 const ImageSlider = ({ ProductImages, product }) => {
     const [current, setCurrent] = useState(0)
-    const length = ProductImages.length
-    const { addToCart } = useAppContext();
     const [wishlist, setWishlist] = useState([]);
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
+    const { addToCart } = useAppContext();
     
-    if (!Array.isArray(ProductImages) || ProductImages.length === 0) return null
-    
-    const nextSlide = () => setCurrent((prev) => (prev + 1) % length)
-    const prevSlide = () => setCurrent((prev) => (prev - 1 + length) % length)
-
  
-
-    // ✅ Fixed wishlist fetch - Tumhare API structure ke hisab se
     useEffect(() => {
         fetch("/api/wishlist")
             .then((res) => res.json())
             .then((data) => {
-                console.log("Wishlist API response:", data); // Debug ke liye
+                console.log("Wishlist API response:", data);
                 if (data.success) {
-                    // Tumhare API response structure: data.wishlist.products array
                     const wishlistItems = data.wishlist?.products || [];
                     const productIds = wishlistItems.map(item => item._id).filter(Boolean);
                     
-                    console.log("Wishlist product IDs:", productIds); // Debug
+                    console.log("Wishlist product IDs:", productIds);
                     setWishlist(productIds);
                 }
             })
@@ -40,11 +32,19 @@ const ImageSlider = ({ ProductImages, product }) => {
                 setError("Failed to load wishlist");
             });
     }, []);
+
+    // ✅ Ab conditional return rakho
+    if (!Array.isArray(ProductImages) || ProductImages.length === 0) return null
     
+    const length = ProductImages.length
+    const nextSlide = () => setCurrent((prev) => (prev + 1) % length)
+    const prevSlide = () => setCurrent((prev) => (prev - 1 + length) % length)
+
+
 
     // ✅ Fixed like function
     const handleLike = async () => {
-        if (!product?.id) { // Shopify products use 'id' not '_id'
+        if (!product?.id) {
             setError("Product ID not found");
             return;
         }
@@ -60,12 +60,12 @@ const ImageSlider = ({ ProductImages, product }) => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    productId: product.id, // Shopify product ID
+                    productId: product.id,
                 }),
             });
 
             const result = await response.json();
-            console.log("Wishlist operation result:", result); // Debug
+            console.log("Wishlist operation result:", result);
 
             if (result.success) {
                 setWishlist(prev =>
