@@ -13,6 +13,7 @@ import {
   MessageCircle,
   Users,
   LoaderCircle
+  
 
 } from 'lucide-react'
 import { Instagram } from 'lucide-react'
@@ -86,14 +87,14 @@ fetch("/api/query", requestOptions)
   }
 
   const contactMethods = [
-    // {
-    //   icon: Phone,
-    //   title: 'Call Us',
-    //   description: 'Speak directly with our support team',
-    //   details: '+91 1800-123-4567',
-    //   link: 'tel:+9118001234567',
-    //   color: 'from-green-500 to-emerald-600'
-    // },
+    {
+      icon: Instagram,
+      title: 'DM Us',
+      description: 'DM Us on instagram 10AM To 6 Pm',
+      details: '@shopovix',
+      link: 'https://www.instagram.com/shopovix',
+      color: 'from-red-500 to-red-600'
+    },
     {
       icon: Mail,
       title: 'Email Us',
@@ -223,7 +224,7 @@ fetch("/api/query", requestOptions)
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+          <div className="grid md:grid-cols-2  gap-6 mb-20">
             {contactMethods.map((method, index) => (
               <Link
                 key={index}
@@ -402,7 +403,7 @@ fetch("/api/query", requestOptions)
                     <Clock className="w-6 h-6 text-yellow-300 flex-shrink-0" />
                     <div>
                     
-                      <p className="opacity-90">Monday - Sunday: 9:00 AM - 9:00 PM IST</p>
+                      <p className="opacity-90">Monday - Sunday: 10:00 AM - 7:00 PM IST</p>
                     </div>
                   </div>
                   {/* <div className="flex items-center gap-4">

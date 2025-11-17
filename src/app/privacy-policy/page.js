@@ -77,7 +77,7 @@ You have full control - you can manage or delete cookies anytime through your br
 • Withdraw consent for marketing communications
 • Request a portable copy of your information
 
-To exercise any of these rights, simply email us at shopovixstore@gmail.com and we'll promptly assist you.`
+To exercise any of these rights, simply email us at support@shopovix.com and we'll promptly assist you.`
     },
     {
       id: 'data-retention',
@@ -160,12 +160,12 @@ Any changes will be posted here with an updated effective date. We encourage you
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-green-200 shadow-sm max-w-2xl mx-auto">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-sm text-gray-500">Effective Date</p>
+                <p className="text-sm text-gray-500">Last Update</p>
                 <p className="font-semibold text-gray-900">July 18, 2025</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Store</p>
-                <p className="font-semibold text-gray-900">Shopovix.store</p>
+                <p className="font-semibold text-gray-900">Shopovix</p>
               </div>
             </div>
           </div>
@@ -246,11 +246,11 @@ Any changes will be posted here with an updated effective date. We encourage you
               We&apos;re here to help you understand how we protect your data
             </p>
             <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-8">
-              <p className="text-2xl font-semibold mb-2">shopovixstore@gmail.com</p>
+              <p className="text-2xl font-semibold mb-2">support@shopovix.com</p>
               <p className="opacity-90">We typically respond within 24 hours</p>
             </div>
             <button 
-              onClick={() => window.location = 'mailto:shopovixstore@gmail.com'}
+              onClick={() => window.location = 'mailto:support@shopovix.com'}
               className="bg-white text-green-600 hover:bg-gray-100 font-bold py-4 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
             >
               Contact Our Privacy Team

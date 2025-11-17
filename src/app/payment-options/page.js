@@ -317,7 +317,7 @@ Need immediate help? Contact our support team!`
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6">
                 <Mail className="w-8 h-8 mx-auto mb-3 opacity-90" />
                 <p className="text-lg font-semibold mb-2">Email Support</p>
-                <p className="text-xl font-bold">shopovixstore@gmail.com</p>
+                <p className="text-xl font-bold">support@shopovix.com</p>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6">
                 <CheckCircle className="w-8 h-8 mx-auto mb-3 opacity-90" />
@@ -326,7 +326,7 @@ Need immediate help? Contact our support team!`
               </div>
             </div>
             <button 
-              onClick={() => window.location = 'mailto:shopovixstore@gmail.com'}
+              onClick={() => window.location = 'mailto:support@shopovix.com'}
               className="bg-white text-green-600 hover:bg-gray-100 font-bold py-4 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
             >
               Contact Payment Support

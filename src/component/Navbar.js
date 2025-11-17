@@ -43,7 +43,7 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
               <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-              🚚 Free Shipping Over $50
+              🚚 Free Shipping on All Orders
             </span>
             <span className="hidden sm:flex items-center gap-1">
               <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
@@ -193,19 +193,15 @@ const Navbar = () => {
         {/* Mobile Search Bar */}
       </nav>
         <div className="lg:hidden border-t border-gray-200 bg-white px-4 py-3">
-          <MobileSearch />
+          <MobileSearch     />
         </div>
+    
 
-      {/* Overlay for dropdowns */}
-      {/* {(isDropdownOpen || isSearchOpen) && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => {
-            setIsDropdownOpen(false)
-            setIsSearchOpen(false)
-          }}
-        />
-      )} */}
+    
+
+    
+
+
     </>
   )
 }

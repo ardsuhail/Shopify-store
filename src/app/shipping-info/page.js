@@ -132,12 +132,12 @@ Currently focused on serving India. International shipping coming soon!`
 
 We're here to assist you through:
 
-📧 Email: shopovixstore@gmail.com
+📧 Email: support@shopovix.com
 📱 Instagram: Direct message on our official page
 💬 Contact Form: Available on our website
 
 ⏰ Support Hours:
-• Monday to Saturday: 9:00 AM - 6:00 PM
+• Monday to Saturday: 10:00 AM - 7:00 PM
 • Sunday: 10:00 AM - 4:00 PM
 
 We typically respond within 24 hours during business hours.
@@ -317,7 +317,7 @@ For urgent shipping issues, please include your order number in your message for
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6">
                 <Mail className="w-8 h-8 mx-auto mb-3 opacity-90" />
                 <p className="text-lg font-semibold mb-2">Email Support</p>
-                <p className="text-lg font-bold">shopovixstore@gmail.com</p>
+                <p className="text-lg font-bold">support@shopovix.com</p>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6">
                 <Clock className="w-8 h-8 mx-auto mb-3 opacity-90" />
@@ -326,7 +326,7 @@ For urgent shipping issues, please include your order number in your message for
               </div>
             </div>
             <button 
-              onClick={() => window.location = 'mailto:shopovixstore@gmail.com'}
+              onClick={() => window.location = 'mailto:support@shopovix.com'}
               className="bg-white text-green-600 hover:bg-gray-100 font-bold py-4 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
             >
               Contact Shipping Support

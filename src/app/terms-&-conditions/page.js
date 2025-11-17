@@ -187,11 +187,11 @@ We recommend reviewing these terms periodically.`
               </div>
               <div>
                 <p className="text-sm text-gray-500">Store</p>
-                <p className="font-semibold text-gray-900">Shopovix.store</p>
+                <p className="font-semibold text-gray-900">Shopovix</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Contact</p>
-                <p className="font-semibold text-gray-900">shopovixstore@gmail.com</p>
+                <p className="font-semibold text-gray-900">support@shopovix.com</p>
               </div>
             </div>
           </div>
@@ -278,7 +278,7 @@ We recommend reviewing these terms periodically.`
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6">
                 <p className="text-lg font-semibold mb-2">Email Support</p>
-                <p className="text-2xl font-bold">shopovixstore@gmail.com</p>
+                <p className="text-2xl font-bold">support@shopovix.com</p>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6">
                 <p className="text-lg font-semibold mb-2">Social Media</p>
@@ -287,7 +287,7 @@ We recommend reviewing these terms periodically.`
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
-                onClick={() => window.location = 'mailto:shopovixstore@gmail.com'}
+                onClick={() => window.location = 'mailto:support@shopovix.com'}
                 className="bg-white text-green-600 hover:bg-gray-100 font-bold py-4 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
               >
                 Email Us

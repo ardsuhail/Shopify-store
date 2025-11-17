@@ -273,7 +273,7 @@ const AboutPage = () => {
             <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8 border border-blue-100">
               <Mail className="w-12 h-12 text-blue-500 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-gray-800 mb-2">Email</h3>
-              <p className="text-gray-600 mb-4">shopovixstore@gmail.com</p>
+              <p className="text-gray-600 mb-4">support@shopovix.com</p>
               <p className="text-sm text-gray-500">24-48 hour response</p>
             </div>
 

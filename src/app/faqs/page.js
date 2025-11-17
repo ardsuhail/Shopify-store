@@ -158,11 +158,11 @@ const FAQsPage = () => {
                 question: 'How can I update my profile information?',
                 answer: 'After logging in, click on the user icon in the top right corner and select "Profile". Here you can: • Update your personal details (name, email, phone) • Add or edit shipping addresses • Manage communication preferences • All changes are saved instantly.'
             },
-            {
-                id: 'account-3',
-                question: 'I forgot my password. How can I reset it?',
-                answer: 'If you used email registration, click "Forgot Password" on the login page, enter your registered email, and we will send a reset link. The link expires in 2 hours for security. Google authentication users can reset through their Google account.'
-            },
+            // {
+            //     id: 'account-3',
+            //     question: 'I forgot my password. How can I reset it?',
+            //     answer: 'If you used email registration, click "Forgot Password" on the login page, enter your registered email, and we will send a reset link. The link expires in 2 hours for security. Google authentication users can reset through their Google account.'
+            // },
             {
                 id: 'account-4',
                 question: 'Is my personal information secure with you?',
@@ -178,12 +178,12 @@ const FAQsPage = () => {
             {
                 id: 'support-1',
                 question: 'How can I contact customer support?',
-                answer: 'You can reach us through: • Instagram: Direct message on our official page • Email: Send us your queries at our support email • Contact Form: Use the contact form on our website • We typically respond within 2-4 hours during business hours.'
+                answer: 'You can reach us through: • Instagram: Direct message on our official page • Email: Send us your queries at our support email • Contact Form: Use the contact form on our website • We typically respond within 24 hours during business hours.'
             },
             {
                 id: 'support-2',
                 question: 'What are your customer support hours?',
-                answer: 'Our customer support team is available: • Monday to Saturday: 9:00 AM to 6:00 PM IST • Sunday: 10:00 AM to 4:00 PM IST • We strive to respond to all queries within 24 hours.'
+                answer: 'Our customer support team is available: • Monday to Saturday: 10:00 AM to 7:00 PM IST • Sunday: 10:00 AM to 4:00 PM IST • We strive to respond to all queries within 24 hours.'
             },
             {
                 id: 'support-3',

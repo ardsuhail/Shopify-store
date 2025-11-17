@@ -51,7 +51,7 @@ These exceptions help us maintain quality standards and fair pricing for all cus
       title: 'How to Request a Return',
       content: `Initiating a return is simple and straightforward:
 
-Step 1: Email us at shopovixstore@gmail.com with:
+Step 1: Email us at support@shopovix.com with:
 • Your Order ID
 • Clear images showing the defect or issue
 • Detailed reason for return
@@ -95,7 +95,7 @@ We ensure transparent communication throughout the process.`
 
 Step 1: Check your bank or payment account again
 Step 2: Contact your bank - processing times may vary
-Step 3: Still no refund? Email us at shopovixstore@gmail.com
+Step 3: Still no refund? Email us at support@shopovix.com
 
 Common Reasons for Delays:
 • Bank processing times (especially on weekends)
@@ -123,25 +123,34 @@ Exchange Process:
 
 Note: Exchanges are subject to product availability. If your desired item is out of stock, we'll offer a refund instead.`
     },
-    {
-      id: 'shipping',
-      icon: <Truck className="w-6 h-6" />,
-      title: 'Shipping for Returns',
-      content: `Return Shipping Guidelines:
+   {
+  id: 'shipping',
+  icon: <Truck className="w-6 h-6" />,
+  title: 'Return Shipping Process',
+  content: `Return Shipping Guidelines:
 
-📦 Our Error (Wrong/Defective Product):
-• We bear the complete shipping cost
-• We provide a prepaid shipping label
-• Free pickup from your location
+📦 Our Responsibility (Wrong/Defective Product):
+• We cover complete return shipping cost
+• Free pickup arranged from your location
+• Prepaid shipping label provided
+• Quick resolution within 24 hours
 
-📦 Customer-Initiated Returns:
-• Return shipping is your responsibility
-• Always use trackable courier service
-• Share tracking ID with us
-• Ensure proper packaging
+📦 Customer-Initiated Returns (Size/Change of Mind):
+• Return shipping cost is customer's responsibility
+• Use trackable courier service only
+• Share tracking details with our support team
+• Ensure original packaging is intact
 
-💡 Pro Tip: Use insured shipping to protect your return. we're not responsible for returns lost in transit without tracking.`
-    }
+🚚 Recommended Couriers:
+• Delhivery • DTDC • Blue Dart
+• Any reliable trackable service
+
+💡 Important: 
+• Returns without tracking won't be accepted
+• Use insured shipping for high-value items
+• Contact us before shipping for approval
+• Refund processed after we receive and verify the product`
+}
   ]
 
   const policyHighlights = [
@@ -215,11 +224,11 @@ Note: Exchanges are subject to product availability. If your desired item is out
               </div>
               <div>
                 <p className="text-sm text-gray-500">Store</p>
-                <p className="font-semibold text-gray-900">Shopovix.store</p>
+                <p className="font-semibold text-gray-900">Shopovix</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Contact</p>
-                <p className="font-semibold text-gray-900">shopovixstore@gmail.com</p>
+                <p className="font-semibold text-gray-900">support@shopovix.com</p>
               </div>
             </div>
           </div>
@@ -314,7 +323,7 @@ Note: Exchanges are subject to product availability. If your desired item is out
               Start your return process by emailing us with your order details
             </p>
             <button 
-              onClick={() => window.location = 'mailto:shopovixstore@gmail.com'}
+              onClick={() => window.location = 'mailto:support@shopovix.com'}
               className="bg-white text-green-600 hover:bg-gray-100 font-bold py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
               Start Return Process
@@ -330,7 +339,7 @@ Note: Exchanges are subject to product availability. If your desired item is out
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-green-600" />
-                <span className="text-gray-700">shopovixstore@gmail.com</span>
+                <span className="text-gray-700">support@shopovix.com</span>
               </div>
               <div className="flex items-center gap-3">
                 <Instagram className="w-5 h-5 text-green-600" />
