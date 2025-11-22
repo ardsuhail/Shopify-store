@@ -299,7 +299,7 @@ export default function TrackOrderPage() {
         {!order && !error && (
           <div className="text-center mt-8">
             <p className="text-gray-500 text-sm">
-              Can't find your tracking number? Check your order confirmation email.
+              Can&apos;t find your tracking number? Check your order confirmation email.
             </p>
           </div>
         )}

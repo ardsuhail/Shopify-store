@@ -299,7 +299,7 @@ const showOldSchoolCopyPrompt = (text) => {
 
             {/* Next Steps */}
             <div className="bg-white rounded-2xl shadow-sm border p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">What's Next?</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">What&apos;s Next?</h2>
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -317,7 +317,7 @@ const showOldSchoolCopyPrompt = (text) => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Shipping Updates</h3>
-                    <p className="text-gray-600">We'll notify you when your order ships</p>
+                    <p className="text-gray-600">We&apos;ll notify you when your order ships</p>
                   </div>
                 </div>
                 

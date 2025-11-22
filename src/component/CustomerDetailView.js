@@ -256,7 +256,7 @@ const CustomerDetailView = ({ customer, onBack }) => {
               <Package className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Orders Found</h3>
               <p className="text-gray-500 dark:text-gray-400">
-                This customer hasn't placed any orders yet.
+                This customer hasn&apos;t placed any orders yet.
               </p>
             </div>
           )}
