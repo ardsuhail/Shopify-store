@@ -14,8 +14,9 @@ import {
   Home,
   Instagram
 } from "lucide-react";
+import { Suspense } from "react";
+const ThankYouPage=(params) => {
 
-export default function ThankYouPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
@@ -425,4 +426,16 @@ const showOldSchoolCopyPrompt = (text) => {
      
     </div>
   );
+}
+
+
+export default function Page() {
+  return <Suspense  fallback={ <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Preparing your order details...</p>
+        </div>
+      </div>} >
+    <ThankYouPage/>
+  </Suspense>
 }
