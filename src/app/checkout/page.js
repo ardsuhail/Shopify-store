@@ -12,8 +12,9 @@ import {
   CheckCircle2,
   ChevronDown
 } from "lucide-react";
+import { Suspense } from "react";
+const PremiumCheckoutPage = () => {
 
-export default function PremiumCheckoutPage() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const quantity = parseInt(searchParams.get("quantity")) || 1;
@@ -125,7 +126,7 @@ export default function PremiumCheckoutPage() {
 
             if (verifyData.success) {
               // ✅ Success - redirect to thank you page
-               router.push(`/thank-you?name=${formData.fullName}&orderId=${orderID}&total=${grandTotal}&paymentmethod=${paymentMethod}&address=${formData.address}`);
+              router.push(`/thank-you?name=${formData.fullName}&orderId=${orderID}&total=${grandTotal}&paymentmethod=${paymentMethod}&address=${formData.address}`);
             } else {
               alert("Payment verification failed");
             }
@@ -135,30 +136,30 @@ export default function PremiumCheckoutPage() {
             setPayLoading(false);
           }
         },
-            prefill: {
-                name: formData.fullName,
-                email: formData.email,
-                contact: formData.phone
-            },
-            theme: { color: "#3399cc" }
+        prefill: {
+          name: formData.fullName,
+          email: formData.email,
+          contact: formData.phone
+        },
+        theme: { color: "#3399cc" }
       }
 
       // Razorpay integration continue...
- if (typeof window !== "undefined" && window.Razorpay) {
-            const rzp1 = new window.Razorpay(options);
-            rzp1.open();
-        } else {
-            console.error("❌ Razorpay SDK not loaded");
-            alert("Payment gateway not loaded. Please refresh and try again.");
-            setPayLoading(false);
-        }
+      if (typeof window !== "undefined" && window.Razorpay) {
+        const rzp1 = new window.Razorpay(options);
+        rzp1.open();
+      } else {
+        console.error("❌ Razorpay SDK not loaded");
+        alert("Payment gateway not loaded. Please refresh and try again.");
+        setPayLoading(false);
+      }
     } catch (error) {
       console.error("Order error:", error);
       alert(error.message || "Something went wrong");
     } finally {
       setPayLoading(false);
     }
-    
+
   };
 
   // ✅ Form validation function
@@ -546,4 +547,15 @@ export default function PremiumCheckoutPage() {
       </div>
     </>
   );
+}
+
+export default function Page() {
+  return <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="animate-pulse text-center">
+      <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4"></div>
+      <p className="text-gray-600">Loading your premium experience...</p>
+    </div>
+  </div>} >
+    <PremiumCheckoutPage />
+  </Suspense>
 }
