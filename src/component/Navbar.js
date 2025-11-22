@@ -38,7 +38,7 @@ const Navbar = () => {
   return (
     <>
       {/* Top Trust Bar */}
-      <div className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white py-2 px-4 text-xs sm:text-sm">
+      <div className=" z-50 bg-gradient-to-r from-emerald-600 to-blue-600 text-white py-2 px-4 text-xs sm:text-sm">
         <div className="container mx-auto flex gap-8 sm:justify-between items-center">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">

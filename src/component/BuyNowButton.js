@@ -7,24 +7,16 @@ const BuyNowButton = ({ product, quantity = 1 }) => {
    const { addToCart } = useAppContext();
     const router = useRouter()
 
-    const handleBuyNow = () => {
-        router.push(`/checkout?id=${product.variants[0].id}&quantity=${quantity}`)
-    }
+    // const handleBuyNow = () => {
+    //     router.push(`/checkout?id=${product.variants[0].id}&quantity=${quantity}`)
+    // }
     const variantId = product.variants[0].id
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        console.log('Submitting checkout for:', variantId, 'quantity', quantity) // 🧩 DEBUG LINE
-        const res = await fetch('/api/createCheckout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ variantId, quantity })
-        })
-        const data = await res.json()
-        console.log('Full Shopify Response:', JSON.stringify(data, null, 2))
-        // 🧩 DEBUG LINE
-        if (data.url) window.location.href = data.url
-    }
+
+
+  const handleBuyNow = () => {
+    router.push(`/checkout?id=${product.id}&quantity=${quantity}`);
+  };
 
     return (
 
@@ -33,9 +25,12 @@ const BuyNowButton = ({ product, quantity = 1 }) => {
                 <ShoppingCart className="w-5 h-5" />
                 Add to Cart
             </button>
-            <button onClick={handleSubmit} className="bg-gray-900 hover:bg-black text-white py-3 px-6 rounded-lg font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300 sm:w-auto w-full">
-                Buy Now
-            </button>
+             <button 
+      onClick={handleBuyNow}
+      className="bg-black text-white px-6 py-3 rounded-lg font-semibold"
+    >
+      Buy Now
+    </button>
         </div>
 
     )

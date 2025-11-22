@@ -1,0 +1,225 @@
+import Customer from "@/model/Customer";
+import Order from "@/model/Order";
+import connectDB from "@/db/connectDB";
+import Razorpay from "razorpay";
+import { NextResponse } from "next/server";
+import { createShiprocketOrder } from "../../../../utils/shiprocket";
+
+export async function POST(req) {
+  try {
+    await connectDB();
+    const body = await req.json();
+    console.log("Received order data:", body);
+
+    const { paymentMethod = "COD", ...rest } = body;
+    const email = body.email?.toLowerCase();
+
+    // ✅ Common validation for all fields
+    const requiredFields = ['fullName', 'phone', 'email', 'address', 'city', 'state', 'pincode'];
+    const missingFields = requiredFields.filter(field => !body[field]?.trim());
+
+    if (missingFields.length > 0) {
+      return NextResponse.json({
+        success: false,
+        message: `Missing required fields: ${missingFields.join(', ')}`
+      }, { status: 400 });
+    }
+
+    // ✅ Create/Update Customer
+    const customerData = {
+      email,
+      phone: body.phone.toString(), // ✅ String me convert
+      country: body.country || "India",
+      fullName: body.fullName,
+      address: body.address,
+      city: body.city,
+      state: body.state,
+      pincode: body.pincode.toString(), // ✅ String me convert
+    };
+
+    const customer = await Customer.findOneAndUpdate(
+      { email },
+      customerData,
+      {
+        new: true,
+        upsert: true,
+        runValidators: true
+      }
+    );
+
+    // ✅ Handle COD Payment
+    if (paymentMethod === "COD" || paymentMethod === "cod") {
+
+      const orderData = {
+        customer: customer._id,
+        email,
+        customerName: body.fullName,
+        customerAddress: body.address,
+        products: Array.isArray(body.product) ? body.product.map(p => ({
+          productId: p.id || p._id || Math.random().toString(36).substr(2, 9),
+          title: p.title || p.product_title || "Product",
+          price: p.price || p.product_price || 0,
+          comparisonPrice: p.comparisonPrice || p.comparison_price || 0,
+          quantity: p.quantity || 1,
+          image: getImageUrl(p)
+        })) : [],
+        totalAmount: body.totalAmount || body.amount || 0,
+        paymentMethod: "COD",
+        paymentStatus: "pending",
+        orderStatus: "processing"
+      };
+
+      const order = await Order.create(orderData);
+      const shiprocket = await createShiprocketOrder(order, customer);
+      console.log("Shiprocket response:", shiprocket);
+      if (shiprocket) {
+        const shipment_id = shiprocket.shipment_id || shiprocket.data?.shipment_id || shiprocket.shipment?.shipment_id || "";
+        const awb_code = shiprocket.awb_code || shiprocket.data?.awb_code || shiprocket.shipment?.awb || shiprocket.shipment?.awb_code || "";
+        const shiprocket_order_id = shiprocket.order_id || shiprocket.data?.order_id || shiprocket.order_id || "";
+
+        await Order.findByIdAndUpdate(order._id, {
+          shipment_id,
+          awb_code,
+          shiprocket_order_id
+        }, { new: true });
+      }
+      console.log(order)
+      return NextResponse.json({
+        success: true,
+        message: "COD Order created successfully",
+        order,
+        customer,
+        shiprocket
+      });
+    }
+    // ✅ Handle Online Payment
+    else {
+      // ✅ Razorpay Instance
+      if (!process.env.RAZORPAY_KEY || !process.env.RAZORPAY_SECRET) {
+        throw new Error("Razorpay credentials not configured");
+      }
+
+      const instance = new Razorpay({
+        key_id: process.env.RAZORPAY_KEY,
+        key_secret: process.env.RAZORPAY_SECRET
+      });
+
+      const amount = body.amount || body.totalAmount || 0;
+
+      // ✅ Razorpay Order Create
+      let razorpayOrder;
+      try {
+        razorpayOrder = await instance.orders.create({
+          amount: Math.round(amount * 100), // ✅ Paise me
+          currency: "INR",
+          receipt: `receipt_${Date.now()}`
+        });
+      } catch (err) {
+        console.error("Razorpay order error:", err);
+        return NextResponse.json({
+          success: false,
+          message: err.error?.description || "Payment gateway error"
+        }, { status: 500 });
+      }
+
+      // ✅ Update customer with order ID
+      await Customer.findByIdAndUpdate(customer._id, {
+        oid: razorpayOrder.id
+      });
+
+      // ✅ Create Order Record
+      const orderData = {
+        customer: customer._id,
+        email,
+        fullName: body.fullName,
+        customerName: body.fullName,
+        customerAddress: body.address,
+        products: Array.isArray(body.product) ? body.product.map(p => ({
+          productId: p.id || p._id || Math.random().toString(36).substr(2, 9),
+          title: p.title || p.product_title || "Product",
+          price: p.price || p.product_price || 0,
+          comparisonPrice: p.comparisonPrice || p.comparison_price || 0,
+          quantity: p.quantity || 1,
+          image: getImageUrl(p)
+        })) : [],
+        totalAmount: amount,
+        razorpayOrderId: razorpayOrder.id,
+        paymentMethod: "online",
+        paymentStatus: "pending",
+        orderStatus: "processing"
+      };
+
+      const order = await Order.create(orderData);
+      const shiprocket = await createShiprocketOrder(order, customer);
+      console.log("Shiprocket response:", shiprocket);
+
+      if (shiprocket) {
+        const shipment_id = shiprocket.shipment_id || shiprocket.data?.shipment_id || shiprocket.shipment?.shipment_id || "";
+        const awb_code = shiprocket.awb_code || shiprocket.data?.awb_code || shiprocket.shipment?.awb || shiprocket.shipment?.awb_code || "";
+        const shiprocket_order_id = shiprocket.order_id || shiprocket.data?.order_id || shiprocket.order_id || "";
+
+        await Order.findByIdAndUpdate(order._id, {
+          shipment_id,
+          awb_code,
+          shiprocket_order_id
+        }, { new: true });
+      }
+      console.log(order)
+
+      return NextResponse.json({
+        success: true,
+        message: "Razorpay order created",
+        order: razorpayOrder, // Razorpay order data
+        dbOrder: order, // Database order
+        customer,
+        shiprocket
+      });
+    }
+
+  } catch (error) {
+    console.error("API Error:", error);
+    return NextResponse.json({
+      success: false,
+      message: error.message || "Internal server error"
+    }, { status: 500 });
+  }
+}
+
+// ✅ Helper function for image URL
+function getImageUrl(product) {
+  if (!product) return "";
+
+  if (Array.isArray(product.image)) {
+    return product.image[0]?.url || product.image[0]?.src || product.image[0] || "";
+  }
+
+  return product.image?.url || product.image?.src || product.image || "";
+}
+
+// ✅ GET Latest Customer
+export async function GET(req) {
+  try {
+    await connectDB();
+
+    const customer = await Customer.find().sort({ createdAt: -1 });
+
+    if (!customer) {
+      return NextResponse.json({
+        success: false,
+        message: "No customer found"
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      customer
+    });
+
+  } catch (err) {
+    console.error("GET Customer Error:", err);
+    return NextResponse.json({
+      success: false,
+      message: err.message
+    }, { status: 500 });
+  }
+}

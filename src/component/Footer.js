@@ -162,7 +162,8 @@ const Footer = () => {
                                 { href: "/shipping-info", label: "Shipping Information" },
                                 { href: "/payment-options", label: "Payment Options" },
                                 { href: "/terms-&-conditions", label: "Terms & Conditions" },
-                                { href: "/privacy-policy", label: "Privacy Policy" }
+                                { href: "/privacy-policy", label: "Privacy Policy" },
+                                { href: "/track-your-order", label: "Track Your Order" }
                             ].map((link) => (
                                 <li key={link.href}>
                                     <Link 

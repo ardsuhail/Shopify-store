@@ -92,11 +92,11 @@ export default function RootLayout({ children }) {
       >
         <SessionWrapper>
         <AppProvider>
-        {/* <Navbar/> */}
-          {/* <NavSidebar/> */}
-          {/* <Cart/> */}
+        <Navbar/>
+          <NavSidebar/>
+          <Cart/>
         {children}
-        {/* <Footer/> */}
+        <Footer/>
         </AppProvider>
         </SessionWrapper>
       </body>
