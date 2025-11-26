@@ -6,8 +6,8 @@ const OrderSchema = new mongoose.Schema({
     ref: "Customer",
     required: true
   },
-  fullName:{
-    type:String,
+  fullName: {
+    type: String,
   },
   products: [
     {
@@ -18,6 +18,10 @@ const OrderSchema = new mongoose.Schema({
       price: Number,
     }
   ],
+  orderId: {
+    type: String
+
+  },
   customerName: String,
   customerAddress: String,
   razorpayOrderId: String,
@@ -35,7 +39,10 @@ const OrderSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-
+  fbclid: { type: String, default: "" },
+  utm_source: { type: String, default: "" },
+  utm_medium: { type: String, default: "" },
+  utm_campaign: { type: String, default: "" },
   paymentStatus: {
     type: String,
     default: "pending"

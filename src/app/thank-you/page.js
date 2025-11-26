@@ -61,7 +61,7 @@ const ThankYouPage=(params) => {
   }
 }, [countdown, router]);
   // ✅ Last 8 characters of order ID
-  const shortOrderId = orderDetails.orderId ? orderDetails.orderId.slice(-8) : "N/A";
+  // const shortOrderId = orderDetails.orderId ? orderDetails.orderId.slice(-8) : "N/A";
   
   // ✅ Format amount properly
   const formattedAmount = orderDetails.total ? `₹${parseInt(orderDetails.total).toLocaleString()}` : "₹0";
@@ -88,7 +88,7 @@ const handleShareOrder = async () => {
   try {
     const shareData = {
       title: 'Shopovix Order Confirmation',
-      text: `I just placed an order on Shopovix! Order ID: ${shortOrderId}. Total: ${formattedAmount}`,
+      text: `I just placed an order on Shopovix! Order ID: ${orderDetails.orderId}. Total: ${formattedAmount}`,
       url: window.location.href,
     };
 
@@ -251,7 +251,7 @@ const showOldSchoolCopyPrompt = (text) => {
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-sm font-medium text-gray-500 mb-2">Order ID</h3>
-                    <p className="text-lg font-semibold text-gray-900">{shortOrderId}</p>
+                    <p className="text-lg font-semibold text-gray-900">{orderDetails.orderId}</p>
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-500 mb-2">Payment Method</h3>

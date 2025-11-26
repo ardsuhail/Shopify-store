@@ -17,8 +17,9 @@ const PremiumCheckoutPage = () => {
 
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  
   const quantity = parseInt(searchParams.get("quantity")) || 1;
-
+  const itemsParam = searchParams.get("items");
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [payLoading, setPayLoading] = useState(false)
@@ -35,7 +36,20 @@ const PremiumCheckoutPage = () => {
   const [shippingMethod, setShippingMethod] = useState("standard");
   const [paymentMethod, setPaymentMethod] = useState("online");
   const [couponCode, setCouponCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  // const [orderAmount, setOrderAmount] = useState("");
+  // const [finalAmount, setFinalAmount] = useState("");
+  // const [finalAmount, setFinalAmount] = useState(orderAmount);
+  const [message, setMessage] = useState("");
+  const [cartItems, setCartItems] = useState([])
+
   const router = useRouter()
+  useEffect(() => {
+  if (typeof window !== "undefined" && window.fbq) {
+    window.fbq("track", "InitiateCheckout");
+  }
+}, []);
+
   useEffect(() => {
     if (!id) return;
 
@@ -49,13 +63,68 @@ const PremiumCheckoutPage = () => {
     fetchProduct();
   }, [id]);
 
-  const subtotal = product ? product.price * quantity : 0;
-  const shippingCost = 0; // Free shipping only
-  const discount = couponCode === "WELCOME10" ? subtotal * 0.1 : 0;
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // CASE 1: Cart se aaye hain (multiple items)
+        if (itemsParam) {
+          const parsedItems = JSON.parse(decodeURIComponent(itemsParam));
+          setCartItems(Array.isArray(parsedItems) ? parsedItems : [parsedItems]);
+          setLoading(false);
+        }
+        // CASE 2: Single product se aaye hain (Buy Now) - ORIGINAL LOGIC
+        else if (id) {
+          const res = await fetch(`/api/getProduct?id=${id}`);
+          const data = await res.json();
+          setProduct(data.product);
+          setLoading(false);
+          
+          // Single product ko cart items format mein bhi set karo for totals
+          const cartItem = {
+            id: data.product.id,
+            title: data.product.title,
+            product_price: data.product.price || data.product.variants?.[0]?.price,
+            product_image: data.product.image || data.product.images?.[0]?.src,
+            quantity: quantity
+          };
+          setCartItems([cartItem]);
+        }
+        // CASE 3: Kuch bhi nahi mila
+        else {
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error loading checkout data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [itemsParam, id, quantity]);
+
+  // ✅ ORIGINAL CALCULATION SAME - Dono cases handle karo
+  const subtotal = itemsParam 
+    ? cartItems.reduce((total, item) => total + (parseFloat(item.product_price) * item.quantity), 0)
+    : product ? product.price * quantity : 0;
+  
+  const shippingCost = 0;
   const grandTotal = subtotal + shippingCost - discount;
+
+  // setOrderAmount(subtotal)
+  // setFinalAmount(grandTotal)
+  
   const getFirstImageUrl = (product) => {
     return product?.image || product?.images?.[0] || "/default-image.jpg";
   };
+
+  const utmData = {
+  fbclid: searchParams.get("fbclid") || "",
+  utm_source: searchParams.get("utm_source") || "",
+  utm_campaign: searchParams.get("utm_campaign") || "",
+  utm_medium: searchParams.get("utm_medium") || "",
+};
   // ✅ handleBuyNow function mein yeh change karo:
   const handleBuyNow = async () => {
     // ✅ Form validation
@@ -65,14 +134,14 @@ const PremiumCheckoutPage = () => {
 
     try {
       const amount = grandTotal;
-
+  const productsData = itemsParam ? cartItems : [product];
       const res = await fetch("/api/customer-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount,
           ...formData,
-          product: [product], // ✅ Array me wrap karo
+          product: productsData, // ✅ Array me wrap karo
           totalAmount: amount,
           paymentMethod: paymentMethod,
           // ✅ Consistent field names use karo
@@ -80,7 +149,9 @@ const PremiumCheckoutPage = () => {
           address: formData.address,
           city: formData.city,
           state: formData.state,
-          pincode: formData.pincode
+          pincode: formData.pincode,
+          pixelData:utmData
+
         })
       });
 
@@ -93,7 +164,7 @@ const PremiumCheckoutPage = () => {
       // ✅ COD handling
       if (paymentMethod === "cod") {
         localStorage.setItem("orderCompleted", "true");
-        router.push(`/thank-you?name=${formData.fullName}&orderId=${data.order?._id}&total=${amount}&payment=COD`);
+        router.push(`/thank-you?name=${formData.fullName}&orderId=${data.order?.orderId}&total=${amount}&payment=COD`);
         return;
       }
 
@@ -126,7 +197,7 @@ const PremiumCheckoutPage = () => {
 
             if (verifyData.success) {
               // ✅ Success - redirect to thank you page
-              router.push(`/thank-you?name=${formData.fullName}&orderId=${orderID}&total=${grandTotal}&paymentmethod=${paymentMethod}&address=${formData.address}`);
+              router.push(`/thank-you?name=${formData.fullName}&orderId=${data.order?.orderId}&total=${grandTotal}&paymentmethod=${paymentMethod}&address=${formData.address}`);
             } else {
               alert("Payment verification failed");
             }
@@ -187,6 +258,37 @@ const PremiumCheckoutPage = () => {
 
     return true;
   };
+    const applyCoupon = async () => {
+    if (!couponCode) {
+      setMessage("Please enter a coupon code");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/coupon/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: couponCode,
+          orderAmount: grandTotal,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage(data.error);
+        return;
+      }
+
+      setDiscount(data.discount);
+      // setFinalAmount(data.finalAmount);
+      setMessage("Coupon applied successfully 🎉");
+
+    } catch (err) {
+      setMessage("Something went wrong");
+    }
+  };
   if (loading) return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="animate-pulse text-center">
@@ -196,12 +298,11 @@ const PremiumCheckoutPage = () => {
     </div>
   );
 
-  if (!product) return (
+  if (!itemsParam && !product) return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <p className="text-xl text-gray-700">Product Not Found</p>
     </div>
   );
-
   return (
     <>  <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
       <div className="min-h-screen bg-gray-50">
@@ -231,33 +332,61 @@ const PremiumCheckoutPage = () => {
             {/* Left Column - Forms */}
             <div className="lg:col-span-2 space-y-6">
               {/* Product Summary */}
-              <div className="bg-white rounded-2xl shadow-sm border p-6">
+             <div className="bg-white rounded-2xl shadow-sm border p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Order Summary</h2>
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-20 h-20 object-cover rounded-xl shadow-sm"
-                  />
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{product.title}</h3>
-                    <div className="flex items-center space-x-4 mt-2">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-600">Qty:</span>
-                        <select
-                          className="border rounded-lg px-3 py-1 text-sm"
-                          value={quantity}
-                          onChange={(e) => window.location.href = `/checkout?id=${id}&quantity=${e.target.value}`}
-                        >
-                          {[1, 2, 3, 4, 5].map(num => (
-                            <option key={num} value={num}>{num}</option>
-                          ))}
-                        </select>
+                
+                {itemsParam ? (
+                  // ✅ Cart items display
+                  <div className="space-y-4">
+                    {cartItems.map((item, index) => (
+                      <div key={index} className="flex items-center space-x-4 border-b pb-4 last:border-b-0">
+                        <img
+                          src={item.product_image}
+                          alt={item.title}
+                          className="w-20 h-20 object-cover rounded-xl shadow-sm"
+                        />
+                        <div className="flex-1">
+                          <h3 className="font-medium text-gray-900">{item.title}</h3>
+                          <div className="flex items-center space-x-4 mt-2">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-sm text-gray-600">Qty: {item.quantity}</span>
+                            </div>
+                            <span className="text-lg font-semibold text-gray-900">
+                              ₹{(parseFloat(item.product_price) * item.quantity).toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <span className="text-lg font-semibold text-gray-900">₹{product.price}</span>
+                    ))}
+                  </div>
+                ) : (
+                  // ✅ Single product display - ORIGINAL SAME
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={product?.image}
+                      alt={product?.title}
+                      className="w-20 h-20 object-cover rounded-xl shadow-sm"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-medium text-gray-900">{product?.title}</h3>
+                      <div className="flex items-center space-x-4 mt-2">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm text-gray-600">Qty:</span>
+                          <select
+                            className="border rounded-lg px-3 py-1 text-sm"
+                            value={quantity}
+                            onChange={(e) => window.location.href = `/checkout?id=${id}&quantity=${e.target.value}`}
+                          >
+                            {[1, 2, 3, 4, 5,6,7,8,9,10].map(num => (
+                              <option key={num} value={num}>{num}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <span className="text-lg font-semibold text-gray-900">₹{product?.price}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Customer Information */}
@@ -472,24 +601,37 @@ const PremiumCheckoutPage = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Apply Coupon
                   </label>
+
                   <div className="flex space-x-2">
                     <input
                       type="text"
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value)}
-                      className="flex-1 w-20 sm:w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="flex-1 border w-full border-gray-300 rounded-xl px-4 py-2"
                       placeholder="Enter coupon code"
                     />
-                    <button className="bg-gray-100 text-gray-700 px-4 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
+
+                    <button
+                      onClick={applyCoupon}
+                      className="bg-black text-white px-4 py-2 rounded-xl font-medium hover:bg-gray-800 transition-colors"
+                    >
                       Apply
                     </button>
                   </div>
+
+                  {message && (
+                    <p className="mt-2 text-sm text-blue-600">{message}</p>
+                  )}
                 </div>
+
 
                 {/* Place Order Button */}
 
                 <button
-                  onClick={handleBuyNow}
+                  onClick={
+                    handleBuyNow
+                   
+                  }
                   disabled={payLoading}
                   className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >

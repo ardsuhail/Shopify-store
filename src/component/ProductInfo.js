@@ -1,60 +1,24 @@
-// Server-rendered product page - Premium Design (Fixed)
-
+"use client"
 import React from 'react'
-import { notFound } from 'next/navigation'
-import { getProductById } from '@/server/actions/getProductById'
+
 import { Star, Shield, Truck, RotateCcw, Check, Heart, Share2, ShoppingCart } from 'lucide-react'
-import ImageSlider from '@/component/ImageSlider'
-import Reviews from '@/component/Reviews'
-import ReviewsDisplay from '@/component/CustomerReviews'
-import BuyNowButton from '@/component/BuyNowButton'
-import QuantityCounter from '@/component/QuantityCounter'
-import ProductActions from '@/component/ProductActions'
-import RelatedProducts from '@/component/RelatedProducts'
-import PixelViewContent from "@/component/PixelViewContent";
-
-function formatPrice(price) {
-    if (!price) return '₹0.00'
-    const n = parseFloat(price.toString().replace(/[^\\d.]/g, ''))
-    if (isNaN(n)) return '₹0.00'
-    return `₹${n.toFixed(2)}`
-}
-
-
-export default async function Page({ params }) {
-    const id = params?.id
-    const product = await getProductById(id)
-
-    if (!product) {
-        return notFound()
-    }
-    console.log('📦 Product images:', product.images)
-    console.log('🖼️ Image structure:', product.image)
-    // Temporary test - multiple images manually add karo
-
-
-
-    // Normalize image and price fields from Shopify REST response
-    const imageSrc = product.image?.src || (product.images && product.images[0]?.src) || product.featured_image || ''
-    const images = product.images
-        ? product.images.map(img => img.src)
-        : [imageSrc]
-    const variantPrice = product.variants?.[0]?.price || product.price || null
-    const comparePrice = product.variants?.[0]?.compare_at_price
-    const discountPercent = comparePrice ? Math.round(((parseFloat(comparePrice) - parseFloat(variantPrice)) / parseFloat(comparePrice)) * 100) : 0
- 
-
-
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-             <PixelViewContent product={product} />
+import Reviews from './Reviews'
+import ReviewsDisplay from './CustomerReviews'
+import BuyNowButton from './BuyNowButton'
+import QuantityCounter from './QuantityCounter'
+import ProductActions from './ProductActions'
+// import RelatedProducts from './RelatedProducts'
+import ImageSlider from './ImageSlider'
+const ProductInfo = ({product,products,discountPercent,ProductImages,id,comparePrice}) => {
+  return (
+   <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
             {/* Trust Badge Header */}
             <div className="bg-white border-b">
                 <div className="container mx-auto px-6 py-3">
                     <div className="flex items-center justify-center gap-6 text-xs text-gray-600">
                         <div className="flex items-center gap-2">
                             <Truck className="w-4 h-4 text-emerald-600" />
-                            <span>Free Shipping Over $50</span>
+                            <span>Free Shipping</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Shield className="w-4 h-4 text-emerald-600" />
@@ -201,10 +165,11 @@ export default async function Page({ params }) {
              <ReviewsDisplay  ProductId={id} />
                 </section>
                 <section className="max-w-6xl mx-auto mt-12">            
-             <RelatedProducts currentProductId={id} productType={product.product_type} />
+             {/* <RelatedProducts currentProductId={id} productType={product.product_type} /> */}
                 </section>
             </div>
         </div>
-    )
+  )
 }
-                  
+
+export default ProductInfo

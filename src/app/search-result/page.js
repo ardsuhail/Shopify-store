@@ -4,8 +4,10 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { getProducts } from '@/server/actions/getProducts'
 import { Star, Filter, Grid, List, ChevronDown, Heart } from 'lucide-react'
 import Link from 'next/link'
-
+import { useAppContext } from '@/component/Context'
+import AddToCartBtn from '@/component/AddToCartBtn'
 function SearchResultsLoading() {
+   
     return (
         <div className="min-h-screen bg-gray-50 p-4">
             <div className="max-w-7xl mx-auto">
@@ -50,7 +52,7 @@ function SearchResultsContent() {
 
     const searchQuery = searchParams.get('q') || ''
     const categoryFromUrl = searchParams.get('category') || 'all'
-
+ const {addToCart}=useAppContext()
     useEffect(() => {
         if (categoryFromUrl) {
             setSelectedCategory(categoryFromUrl)
@@ -370,8 +372,8 @@ function SearchResultsContent() {
                                         className="w-full"
                                     />
                                     <div className="flex justify-between text-sm text-gray-600">
-                                        <span>${priceRange[0]}</span>
-                                        <span>${priceRange[1]}</span>
+                                        <span>₹{priceRange[0]}</span>
+                                        <span>₹{priceRange[1]}</span>
                                     </div>
                                 </div>
                             </div>
@@ -468,7 +470,7 @@ function SearchResultsContent() {
                                                    <button 
                                                         onClick={(e) => {
                                                             e.preventDefault();
-                                                            // Add your add to cart logic here
+                                                          addToCart(product)
                                                         }}
                                                         className="w-full mt-4 bg-emerald-500 text-white py-2 rounded-lg hover:bg-emerald-600 transition-colors duration-200"
                                                     >

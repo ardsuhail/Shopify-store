@@ -2,11 +2,11 @@
 import React from "react";
 import { useAppContext } from "./Context";
 import { X, Plus, Minus, Trash2, ShoppingBag, Shield, Truck, Lock, Check } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 const Cart = () => {
   const { isCartOpen, setIsCartOpen, cart, addToCart, removeFromCart, deleteAllItems } = useAppContext();
   const [selectedItems, setSelectedItems] = React.useState(new Set());
-
+  const router=useRouter()
   // Calculate totals only for selected items
   const selectedCartItems = cart.filter(item => selectedItems.has(item.id));
   
@@ -62,6 +62,15 @@ const Cart = () => {
       setIsCartOpen(false);
     }
   };
+
+const handleCheckout = () => {
+    if (selectedCartItems.length === 0) return;
+    
+    // ✅ Selected items ko JSON string mein convert karo
+    const selectedItemsParam = encodeURIComponent(JSON.stringify(selectedCartItems));
+    router.push(`/checkout?items=${selectedItemsParam}`);
+};
+
 
   return (
     <>
@@ -181,7 +190,7 @@ const Cart = () => {
                     </div>
                     
                     <p className="text-emerald-600 font-bold text-lg mb-3">
-                      ${parseFloat(item.product_price).toFixed(2)}
+                      ₹{parseFloat(item.product_price).toFixed(2)}
                     </p>
 
                     {/* Quantity Controls */}
@@ -205,7 +214,7 @@ const Cart = () => {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-semibold text-gray-900">
-                          ${(parseFloat(item.product_price) * item.quantity).toFixed(2)}
+                          ₹{(parseFloat(item.product_price) * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -235,21 +244,21 @@ const Cart = () => {
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Subtotal ({selectedCartItems.length} items)</span>
-                <span className="font-semibold">${subtotal.toFixed(2)}</span>
+                <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Shipping</span>
                 <span className="font-semibold">
-                  {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                  {shipping === 0 ? 'FREE' : `₹${shipping.toFixed(2)}`}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Tax</span>
-                <span className="font-semibold">${tax.toFixed(2)}</span>
+                <span className="font-semibold">₹{tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-100">
                 <span>Total</span>
-                <span className="text-emerald-600">${total.toFixed(2)}</span>
+                <span className="text-emerald-600">₹{total.toFixed(2)}</span>
               </div>
             </div>
 
@@ -271,6 +280,7 @@ const Cart = () => {
             {/* Action Buttons */}
             <div className="space-y-3">
               <button 
+              onClick={handleCheckout}
                 disabled={selectedCartItems.length === 0}
                 className={`w-full py-3 px-6 rounded-lg font-semibold transition-all duration-300 shadow-lg flex items-center justify-center gap-2 ${
                   selectedCartItems.length === 0

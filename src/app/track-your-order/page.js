@@ -173,7 +173,7 @@ export default function TrackOrderPage() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Order ID:</span>
-                    <span className="font-medium">{order.orderDetails.orderId?.toString().substring(0, 8)}...</span>
+                    <span className="font-medium">{order.orderDetails.orderId?.toString().substring(0, 8)}</span>
                   </div>
                   {order.orderDetails.awbCode && (
                     <div className="flex justify-between">

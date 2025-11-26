@@ -62,17 +62,18 @@ export async function POST(req) {
         message: "Please provide Order ID or AWB Code" 
       });
     }
-
+ let orderID=orderId.toLowerCase()
     // First try to find order in database using multiple fields
     let order = null;
-    if (orderId) {
+    if (orderID) {
       // Check if the orderId is a valid MongoDB ObjectId
       const isValidObjectId = mongoose.Types.ObjectId.isValid(orderId);
       
       const searchConditions = [
-        { awb_code: orderId },
+        { awb_code: orderID },
         { shiprocket_order_id: orderId },
-        { razorpayOrderId: orderId }
+        { razorpayOrderId: orderID },
+        {orderId:orderID}
       ];
       
       // Only add _id condition if it's a valid ObjectId
@@ -151,7 +152,7 @@ export async function POST(req) {
       success: true,
       shiprocketStatus: finalStatus,
       orderDetails: order ? {
-        orderId: order._id,
+        orderId: orderId,
         awbCode: order.awb_code,
         razorpayOrderId: order.razorpayOrderId,
         shiprocketOrderId: order.shiprocket_order_id,

@@ -5,6 +5,7 @@ import Razorpay from "razorpay";
 import { NextResponse } from "next/server";
 import { createShiprocketOrder } from "../../../../utils/shiprocket";
 
+
 export async function POST(req) {
   try {
     await connectDB();
@@ -24,7 +25,7 @@ export async function POST(req) {
         message: `Missing required fields: ${missingFields.join(', ')}`
       }, { status: 400 });
     }
-
+    
     // ✅ Create/Update Customer
     const customerData = {
       email,
@@ -47,10 +48,31 @@ export async function POST(req) {
       }
     );
 
+    async function generateOrderId() {
+  // Latest order find
+  const lastOrder = await Order.findOne().sort({ createdAt: -1 });
+
+  let lastNumber = 1000; // default start number
+
+  if (lastOrder?.orderId) {
+    // Example: "Shov1005" → 1005 nikalna
+    const match = lastOrder.orderId.match(/shov(\d+)/);
+
+    if (match && match[1]) {
+      lastNumber = parseInt(match[1]);
+    }
+  }
+
+  const newNumber = lastNumber + 1;
+  return `shov${newNumber}`;
+}
+
+    const orderID=await generateOrderId()
     // ✅ Handle COD Payment
     if (paymentMethod === "COD" || paymentMethod === "cod") {
 
       const orderData = {
+        orderId:orderID,
         customer: customer._id,
         email,
         customerName: body.fullName,
@@ -66,7 +88,11 @@ export async function POST(req) {
         totalAmount: body.totalAmount || body.amount || 0,
         paymentMethod: "COD",
         paymentStatus: "pending",
-        orderStatus: "processing"
+        orderStatus: "processing",
+        fbclid: body.fbclid || "",
+    utm_source: body.utm_source || "",
+    utm_medium: body.utm_medium || "",
+    utm_campaign: body.utm_campaign || "",
       };
 
       const order = await Order.create(orderData);
@@ -126,9 +152,10 @@ export async function POST(req) {
       await Customer.findByIdAndUpdate(customer._id, {
         oid: razorpayOrder.id
       });
-
+  const orderID=await generateOrderId()
       // ✅ Create Order Record
       const orderData = {
+        orderId:orderID,
         customer: customer._id,
         email,
         fullName: body.fullName,
@@ -146,7 +173,11 @@ export async function POST(req) {
         razorpayOrderId: razorpayOrder.id,
         paymentMethod: "online",
         paymentStatus: "pending",
-        orderStatus: "processing"
+        orderStatus: "processing",
+        fbclid: body.fbclid || "",
+    utm_source: body.utm_source || "",
+    utm_medium: body.utm_medium || "",
+    utm_campaign: body.utm_campaign || "",
       };
 
       const order = await Order.create(orderData);

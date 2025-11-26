@@ -39,7 +39,10 @@ export const AppProvider = ({ children }) => {
   // 🧩 Add to Cart function - FIXED individual quantity
   const addToCart = (product) => {
     console.log('🛒 Adding product to cart:', product);
-    
+        fbq('track', 'AddToCart', {
+    content_ids: [product._id],
+    value: product.price,
+    currency: "INR",})
     setCart((prev) => {
       // Create a unique identifier for the product
       const productId = product.id || product._id;

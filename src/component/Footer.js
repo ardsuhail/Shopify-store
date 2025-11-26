@@ -217,7 +217,7 @@ const Footer = () => {
                 <div className="container mx-auto px-6 py-6">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center">
                         <div className="text-sm text-gray-600">
-                            © 2025 Shopovix Store. All Rights Reserved.
+                            © 2025 Shopovix . All Rights Reserved.
                         </div>
                         <div className="flex gap-6 text-xs text-gray-500">
                             <Link href="/privacy-policy" className="hover:text-emerald-600 transition-colors">

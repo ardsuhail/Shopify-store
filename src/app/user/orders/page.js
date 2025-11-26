@@ -2,13 +2,13 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { 
-  Package, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
-  Truck, 
-  CreditCard, 
+import {
+  Package,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Truck,
+  CreditCard,
   MapPin,
   Calendar,
   ArrowRight,
@@ -35,7 +35,7 @@ import {
 } from "lucide-react";
 
 const OrdersPage = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,71 +45,101 @@ const OrdersPage = () => {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        if (!session?.user?.shopifyCustomerIds?.[0]) {
-          console.warn("No Shopify customer ID found");
-          setLoading(false);
-          return;
-        }
-
-        const res = await fetch("/api/getOrders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            customerId: session.user.shopifyCustomerIds[0],
-          }),
-        });
-
-        const data = await res.json();
-        console.log("📦 Orders API Response:", data);
-
-        if (data.success) {
-          setOrders(data.orders || []);
-        } else {
-          console.error("Error:", data.error);
-        }
-      } catch (error) {
-        console.error("Fetch failed:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (session) {
-      fetchOrders();
+    if (status !== "authenticated") {
+      setLoading(false);
+      return;
     }
-  }, [session]);
+
+    console.log("Fetching orders for user:", session?.user?.email);
+
+    fetch("/api/orders")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("API Response:", data);
+        setOrders(data.orders || []);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching orders:", error);
+        setLoading(false);
+      });
+  }, [status, session]);
+
+  // Transform MongoDB order data to match UI expectations
+  const transformOrderData = (orders) => {
+    if (!orders || !Array.isArray(orders)) return [];
+    
+    return orders.map(order => ({
+      id: order._id || order.id,
+      order_number: order.orderId,
+      created_at: order.createdAt || order.created_at,
+      total_price: order.totalAmount,
+      financial_status: order.paymentStatus,
+      fulfillment_status: order.orderStatus,
+      line_items: (order.products || []).map(product => ({
+        id: product.productId || product.id,
+        title: product.title,
+        quantity: product.quantity,
+        price: product.price,
+        image: product.image,
+        product_id: product.productId,
+        variant_title: "",
+        discount_allocations: []
+      })),
+      shipping_address: {
+        name: order.fullName || order.customerName || "",
+        address1: order.customerAddress || "",
+        city: order.customer?.city || "",
+        province: order.customer?.state || "",
+        zip: order.customer?.pincode || "",
+        country: order.customer?.country || "",
+        phone: order.customer?.phone || ""
+      },
+      subtotal_price: order.totalAmount,
+      total_discounts: 0,
+      total_shipping_price_set: {
+        presentment_money: {
+          amount: 0
+        }
+      },
+      total_tax: 0
+    }));
+  };
 
   // Enhanced image handling with multiple fallbacks
   const getProductImage = (item) => {
     if (!item) return "/api/placeholder/150/150?text=Product+Image";
-    
+
     const imageSources = [
-      item.image?.src,
-      item.featured_image?.src,
+      item.image,
+      item.featured_image,
       item.variant_image,
-      item.images?.[0]?.src,
-      item.product?.images?.[0]?.src
+      item.images?.[0]
     ];
 
-    const validImage = imageSources.find(src => 
-      src && typeof src === 'string' && (src.startsWith('http') || src.startsWith('//'))
+    const validImage = imageSources.find(src =>
+      src && typeof src === 'string' && (src.startsWith('http') || src.startsWith('//') || src.startsWith('/'))
     );
 
     return validImage || `/api/placeholder/150/150?text=${encodeURIComponent(item.title?.split(' ')[0] || 'Product')}`;
   };
 
   const getStatusIcon = (status) => {
-    switch (status?.toLowerCase()) {
+    if (!status) return <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />;
+    
+    switch (status.toLowerCase()) {
       case 'paid':
       case 'completed':
         return <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />;
       case 'pending':
-      case 'authorized':
         return <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600" />;
       case 'refunded':
-      case 'voided':
+      case 'cancelled':
         return <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />;
       default:
         return <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />;
@@ -117,15 +147,16 @@ const OrdersPage = () => {
   };
 
   const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
+    if (!status) return 'bg-blue-50 text-blue-700 border-blue-200';
+    
+    switch (status.toLowerCase()) {
       case 'paid':
       case 'completed':
         return 'bg-green-50 text-green-700 border-green-200';
       case 'pending':
-      case 'authorized':
         return 'bg-yellow-50 text-yellow-700 border-yellow-200';
       case 'refunded':
-      case 'voided':
+      case 'cancelled':
         return 'bg-red-50 text-red-700 border-red-200';
       default:
         return 'bg-blue-50 text-blue-700 border-blue-200';
@@ -133,48 +164,64 @@ const OrdersPage = () => {
   };
 
   const getDeliveryStatus = (order) => {
-    if (order.fulfillment_status === 'fulfilled') return 'Delivered';
-    if (order.fulfillment_status === 'partial') return 'Partially Delivered';
+    const status = order.orderStatus || order.fulfillment_status;
+    if (status === 'delivered') return 'Delivered';
+    if (status === 'shipped') return 'Shipped';
+    if (status === 'processing') return 'Processing';
     return 'Processing';
   };
 
   const getDeliveryColor = (status) => {
     switch (status) {
       case 'Delivered': return 'text-green-600 bg-green-50';
-      case 'Partially Delivered': return 'text-blue-600 bg-blue-50';
+      case 'Shipped': return 'text-blue-600 bg-blue-50';
       default: return 'text-orange-600 bg-orange-50';
     }
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-IN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    if (!dateString) return 'Date not available';
+    try {
+      return new Date(dateString).toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (error) {
+      return 'Invalid date';
+    }
   };
 
   const formatDateTime = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-IN', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    if (!dateString) return 'Date not available';
+    try {
+      return new Date(dateString).toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      return 'Invalid date';
+    }
   };
 
   // Filter orders based on selection
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = order.line_items.some(item => 
-      item.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    
-    const matchesFilter = 
+  const filteredOrders = transformOrderData(orders).filter(order => {
+    const matchesSearch = searchTerm ? 
+      order.line_items.some(item =>
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      ) : true;
+
+    const orderStatus = order.orderStatus || order.fulfillment_status;
+    const paymentStatus = order.financial_status;
+
+    const matchesFilter =
       selectedFilter === "all" ||
-      (selectedFilter === "delivered" && order.fulfillment_status === 'fulfilled') ||
-      (selectedFilter === "processing" && (!order.fulfillment_status || order.fulfillment_status === 'unfulfilled')) ||
-      (selectedFilter === "cancelled" && order.financial_status === 'refunded');
+      (selectedFilter === "delivered" && orderStatus === 'delivered') ||
+      (selectedFilter === "processing" && (!orderStatus || orderStatus === 'processing' || orderStatus === 'pending')) ||
+      (selectedFilter === "cancelled" && paymentStatus === 'refunded');
 
     return matchesSearch && matchesFilter;
   });
@@ -185,7 +232,7 @@ const OrdersPage = () => {
       // Create invoice content
       const invoiceContent = `
         INVOICE
-        Order #: ${order.order_number || order.id.split('/').pop()}
+        Order #: ${order.order_number || order.id}
         Date: ${formatDateTime(order.created_at)}
         
         ITEMS:
@@ -194,13 +241,14 @@ const OrdersPage = () => {
           Qty: ${item.quantity} x ₹${item.price} = ₹${(item.quantity * item.price).toLocaleString('en-IN')}
         `).join('')}
         
-        SUBTOTAL: ₹${parseFloat(order.subtotal_price || order.total_price).toLocaleString('en-IN')}
-        DISCOUNT: -₹${parseFloat(order.total_discounts).toLocaleString('en-IN')}
+        SUBTOTAL: ₹${parseFloat(order.subtotal_price || 0).toLocaleString('en-IN')}
+        DISCOUNT: -₹${parseFloat(order.total_discounts || 0).toLocaleString('en-IN')}
         SHIPPING: ₹${parseFloat(order.total_shipping_price_set?.presentment_money?.amount || 0).toLocaleString('en-IN')}
-        TAX: ₹${parseFloat(order.total_tax).toLocaleString('en-IN')}
-        TOTAL: ₹${parseFloat(order.total_price).toLocaleString('en-IN')}
+        TAX: ₹${parseFloat(order.total_tax || 0).toLocaleString('en-IN')}
+        TOTAL: ₹${parseFloat(order.total_price || 0).toLocaleString('en-IN')}
         
-        Status: ${order.financial_status}
+        Payment Status: ${order.financial_status}
+        Order Status: ${order.fulfillment_status}
         Thank you for your business!
       `;
 
@@ -209,12 +257,12 @@ const OrdersPage = () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `invoice-order-${order.order_number || order.id.split('/').pop()}.txt`;
+      a.download = `invoice-order-${order.order_number || order.id}.txt`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      
+
       alert('Invoice downloaded successfully!');
     } catch (error) {
       console.error('Error downloading invoice:', error);
@@ -234,13 +282,19 @@ const OrdersPage = () => {
     };
     router.push(helpRoutes[section] || '/contact');
   };
+const buyAgain = (product) => {
+  // product may contain productId, product_id, or id depending on source
+  const productID = product?.productId || product?.product_id || product?.id;
 
-  const buyAgain = (product) => {
-    // Redirect to product page or add to cart
-    alert(`Adding ${product.title} to cart...`);
-    // Implement your buy again logic here
-  };
+  console.log("Buying again product:", product);
+  console.log("Resolved Product ID:", productID);
 
+  if (productID) {
+    router.push(`/products/${productID}`);
+  } else {
+    alert("Product ID not found");
+  }
+};
   const navigateToReviews = (productId, productTitle) => {
     router.push(`/create-review?products=${productId}&productTitle=${encodeURIComponent(productTitle)}`);
   };
@@ -260,6 +314,28 @@ const OrdersPage = () => {
     );
   }
 
+  if (status === "unauthenticated") {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <XCircle className="w-8 h-8 sm:w-10 sm:h-10 text-red-600" />
+          </div>
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Please Sign In</h3>
+          <p className="text-gray-600 mb-6">You need to be signed in to view your orders.</p>
+          <button
+            onClick={() => router.push('/auth/signin')}
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg"
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const transformedOrders = transformOrderData(orders);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
       {/* Premium Header */}
@@ -276,9 +352,11 @@ const OrdersPage = () => {
                   {orders.length} orders
                 </span>
               </h1>
-              <p className="text-gray-600 mt-1 text-sm sm:text-base truncate">Track and manage all your purchases</p>
+              <p className="text-gray-600 mt-1 text-sm sm:text-base truncate">
+                Track and manage all your purchases • {session?.user?.email}
+              </p>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
               {/* Mobile Search */}
               <div className="relative flex-1 sm:flex-initial">
@@ -291,7 +369,7 @@ const OrdersPage = () => {
                 />
                 <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
               </div>
-              
+
               {/* Mobile Filter Button */}
               <button
                 onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
@@ -300,7 +378,7 @@ const OrdersPage = () => {
                 <Filter className="w-4 h-4" />
                 Filter
               </button>
-              
+
               {/* Desktop Filter */}
               <select
                 value={selectedFilter}
@@ -325,15 +403,14 @@ const OrdersPage = () => {
                     setSelectedFilter(filter);
                     setMobileFilterOpen(false);
                   }}
-                  className={`px-3 py-2 rounded-lg text-sm border ${
-                    selectedFilter === filter
+                  className={`px-3 py-2 rounded-lg text-sm border ${selectedFilter === filter
                       ? 'bg-green-500 text-white border-green-500'
                       : 'bg-white text-gray-700 border-gray-300'
-                  }`}
+                    }`}
                 >
-                  {filter === 'all' ? 'All Orders' : 
-                   filter === 'delivered' ? 'Delivered' :
-                   filter === 'processing' ? 'Processing' : 'Cancelled'}
+                  {filter === 'all' ? 'All Orders' :
+                    filter === 'delivered' ? 'Delivered' :
+                      filter === 'processing' ? 'Processing' : 'Cancelled'}
                 </button>
               ))}
             </div>
@@ -355,13 +432,13 @@ const OrdersPage = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm font-medium text-gray-600">Total Spent</p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mt-1">
-                  ₹{orders.reduce((sum, order) => sum + parseFloat(order.total_price), 0).toLocaleString('en-IN')}
+                  ₹{orders.reduce((sum, order) => sum + parseFloat(order.totalAmount || 0), 0).toLocaleString('en-IN')}
                 </p>
               </div>
               <div className="p-2 sm:p-3 bg-green-100 rounded-lg">
@@ -369,13 +446,13 @@ const OrdersPage = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm font-medium text-gray-600">Delivered</p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mt-1">
-                  {orders.filter(o => o.fulfillment_status === 'fulfilled').length}
+                  {orders.filter(o => o.orderStatus === 'delivered').length}
                 </p>
               </div>
               <div className="p-2 sm:p-3 bg-green-100 rounded-lg">
@@ -383,13 +460,13 @@ const OrdersPage = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm font-medium text-gray-600">Pending</p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mt-1">
-                  {orders.filter(o => !o.fulfillment_status || o.fulfillment_status === 'unfulfilled').length}
+                  {orders.filter(o => o.orderStatus === 'processing' || o.orderStatus === 'pending').length}
                 </p>
               </div>
               <div className="p-2 sm:p-3 bg-yellow-100 rounded-lg">
@@ -410,12 +487,12 @@ const OrdersPage = () => {
                 {searchTerm ? 'No matching orders' : 'No Orders Yet'}
               </h3>
               <p className="text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base">
-                {searchTerm 
+                {searchTerm
                   ? 'Try adjusting your search terms to find what you\'re looking for.'
                   : 'Start your shopping journey and your orders will appear here.'
                 }
               </p>
-              <button 
+              <button
                 onClick={() => router.push('/products')}
                 className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-2 sm:py-3 px-6 sm:px-8 rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm sm:text-base"
               >
@@ -443,22 +520,22 @@ const OrdersPage = () => {
                         </div>
                         <span className="hidden sm:inline text-gray-300">•</span>
                         <span className="text-xs sm:text-sm font-medium text-gray-900 truncate">
-                          Order # {order.order_number || order.id.split('/').pop()}
+                          Order # {order.order_number || order.id}
                         </span>
                         <span className="hidden sm:inline text-gray-300">•</span>
                         <span className="text-xs sm:text-sm text-gray-600">
-                          Total: ₹{parseFloat(order.total_price).toLocaleString('en-IN')}
+                          Total: ₹{parseFloat(order.total_price || 0).toLocaleString('en-IN')}
                         </span>
                       </div>
-                      
+
                       <div className="flex flex-wrap items-center gap-2">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(order.financial_status)}`}>
-                          Payment: {order.financial_status?.charAt(0).toUpperCase() + order.financial_status?.slice(1)}
+                          Payment: {order.financial_status?.charAt(0).toUpperCase() + order.financial_status?.slice(1) || 'Pending'}
                         </span>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDeliveryColor(getDeliveryStatus(order))}`}>
                           {getDeliveryStatus(order)}
                         </span>
-                        {order.fulfillment_status === 'fulfilled' && (
+                        {(order.fulfillment_status === 'delivered' || order.orderStatus === 'delivered') && (
                           <span className="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">
                             <CheckCircle className="w-3 h-3" />
                             Ready for Review
@@ -466,7 +543,7 @@ const OrdersPage = () => {
                         )}
                       </div>
                     </div>
-                    
+
                     <button
                       onClick={() => setExpandedOrder(expandedOrder === order.id ? null : order.id)}
                       className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1 sm:py-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors text-sm sm:text-base self-start"
@@ -490,7 +567,7 @@ const OrdersPage = () => {
                 <div className="p-4 sm:p-6">
                   <div className="space-y-3 sm:space-y-4">
                     {order.line_items.map((item, index) => (
-                      <div key={item.id} className="flex items-start gap-3 sm:gap-4 pb-3 sm:pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
+                      <div key={item.id || index} className="flex items-start gap-3 sm:gap-4 pb-3 sm:pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
                         {/* Product Image */}
                         <div className="flex-shrink-0">
                           <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-lg border border-gray-200 overflow-hidden bg-gray-50 flex items-center justify-center">
@@ -500,7 +577,9 @@ const OrdersPage = () => {
                               className="w-full h-full object-cover"
                               onError={(e) => {
                                 e.target.style.display = 'none';
-                                e.target.nextSibling.style.display = 'flex';
+                                if (e.target.nextSibling) {
+                                  e.target.nextSibling.style.display = 'flex';
+                                }
                               }}
                             />
                             <div className="hidden w-full h-full items-center justify-center">
@@ -514,34 +593,34 @@ const OrdersPage = () => {
                           <h4 className="font-semibold text-gray-900 hover:text-green-600 transition-colors cursor-pointer text-sm sm:text-base line-clamp-2">
                             {item.title}
                           </h4>
-                          
+
                           {item.variant_title && (
                             <p className="text-xs sm:text-sm text-gray-600 mt-1">Variant: {item.variant_title}</p>
                           )}
-                          
+
                           <div className="flex items-center gap-2 sm:gap-4 mt-1 sm:mt-2 text-xs sm:text-sm text-gray-600">
                             <span>Qty: {item.quantity}</span>
                             <span className="hidden sm:inline">•</span>
-                            <span>₹{parseFloat(item.price).toLocaleString('en-IN')} each</span>
+                            <span>₹{parseFloat(item.price || 0).toLocaleString('en-IN')} each</span>
                           </div>
 
                           {/* Action Buttons for each item - Responsive */}
                           <div className="flex flex-wrap gap-2 sm:gap-3 mt-2">
-                            <button 
+                            <button
                               onClick={() => buyAgain(item)}
                               className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 transition-colors"
                             >
                               <RotateCcw className="w-3 h-3" />
                               Buy Again
                             </button>
-                            <button 
+                            <button
                               onClick={() => navigateToReviews(item.product_id, item.title)}
                               className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-700 transition-colors"
                             >
                               <Star className="w-3 h-3" />
                               Write Review
                             </button>
-                            <button 
+                            <button
                               onClick={() => navigateToHelp('contact')}
                               className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-700 transition-colors"
                             >
@@ -554,7 +633,7 @@ const OrdersPage = () => {
                         {/* Price */}
                         <div className="text-right flex-shrink-0">
                           <p className="font-semibold text-gray-900 text-sm sm:text-base">
-                            ₹{(item.quantity * item.price).toLocaleString('en-IN')}
+                            ₹{((item.quantity || 0) * (item.price || 0)).toLocaleString('en-IN')}
                           </p>
                           {item.discount_allocations?.length > 0 && (
                             <p className="text-xs text-green-600 mt-1 hidden sm:block">
@@ -581,29 +660,29 @@ const OrdersPage = () => {
                           <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
                             <div className="flex justify-between">
                               <span className="text-gray-600">Items Total</span>
-                              <span>₹{parseFloat(order.subtotal_price || order.total_price).toLocaleString('en-IN')}</span>
+                              <span>₹{parseFloat(order.subtotal_price || 0).toLocaleString('en-IN')}</span>
                             </div>
-                            
+
                             {order.total_discounts > 0 && (
                               <div className="flex justify-between">
                                 <span className="text-green-600">Discount</span>
-                                <span className="text-green-600">-₹{parseFloat(order.total_discounts).toLocaleString('en-IN')}</span>
+                                <span className="text-green-600">-₹{parseFloat(order.total_discounts || 0).toLocaleString('en-IN')}</span>
                               </div>
                             )}
-                            
+
                             <div className="flex justify-between">
                               <span className="text-gray-600">Shipping</span>
                               <span>₹{parseFloat(order.total_shipping_price_set?.presentment_money?.amount || 0).toLocaleString('en-IN')}</span>
                             </div>
-                            
+
                             <div className="flex justify-between">
                               <span className="text-gray-600">Tax</span>
-                              <span>₹{parseFloat(order.total_tax).toLocaleString('en-IN')}</span>
+                              <span>₹{parseFloat(order.total_tax || 0).toLocaleString('en-IN')}</span>
                             </div>
-                            
+
                             <div className="border-t pt-2 sm:pt-3 flex justify-between font-semibold text-gray-900 text-sm sm:text-base">
                               <span>Grand Total</span>
-                              <span>₹{parseFloat(order.total_price).toLocaleString('en-IN')}</span>
+                              <span>₹{parseFloat(order.total_price || 0).toLocaleString('en-IN')}</span>
                             </div>
                           </div>
                         </div>
@@ -620,13 +699,14 @@ const OrdersPage = () => {
                               <div className="text-xs sm:text-sm text-gray-600 space-y-1">
                                 <p className="font-medium text-gray-900">{order.shipping_address.name}</p>
                                 <p>{order.shipping_address.address1}</p>
-                                {order.shipping_address.address2 && <p>{order.shipping_address.address2}</p>}
-                                <p>{order.shipping_address.city}, {order.shipping_address.province} {order.shipping_address.zip}</p>
-                                <p>{order.shipping_address.country}</p>
-                                <p className="mt-2 flex items-center gap-1">
-                                  <Phone className="w-3 h-3 sm:w-4 sm:h-4" />
-                                  {order.shipping_address.phone}
-                                </p>
+                                {order.shipping_address.city && <p>{order.shipping_address.city}, {order.shipping_address.province} {order.shipping_address.zip}</p>}
+                                {order.shipping_address.country && <p>{order.shipping_address.country}</p>}
+                                {order.shipping_address.phone && (
+                                  <p className="mt-2 flex items-center gap-1">
+                                    <Phone className="w-3 h-3 sm:w-4 sm:h-4" />
+                                    {order.shipping_address.phone}
+                                  </p>
+                                )}
                               </div>
                             </div>
                           )}
@@ -635,7 +715,7 @@ const OrdersPage = () => {
                           <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 border border-gray-200">
                             <h5 className="font-semibold text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">Need Help?</h5>
                             <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
-                              <button 
+                              <button
                                 onClick={() => downloadInvoice(order)}
                                 className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 bg-green-50 text-green-700 hover:bg-green-100 rounded-lg transition-colors text-xs sm:text-sm justify-center"
                               >
@@ -643,7 +723,7 @@ const OrdersPage = () => {
                                 <span className="hidden sm:inline">Invoice</span>
                                 <span className="sm:hidden">Invoice</span>
                               </button>
-                              <button 
+                              <button
                                 onClick={() => navigateToHelp('return')}
                                 className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg transition-colors text-xs sm:text-sm justify-center"
                               >
@@ -651,7 +731,7 @@ const OrdersPage = () => {
                                 <span className="hidden sm:inline">Returns</span>
                                 <span className="sm:hidden">Returns</span>
                               </button>
-                              <button 
+                              <button
                                 onClick={() => navigateToHelp('contact')}
                                 className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 bg-gray-50 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm justify-center"
                               >
@@ -659,7 +739,7 @@ const OrdersPage = () => {
                                 <span className="hidden sm:inline">Support</span>
                                 <span className="sm:hidden">Support</span>
                               </button>
-                              <button 
+                              <button
                                 onClick={() => navigateToHelp('shipping')}
                                 className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-lg transition-colors text-xs sm:text-sm justify-center"
                               >

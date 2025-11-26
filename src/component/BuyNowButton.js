@@ -37,3 +37,6 @@ const BuyNowButton = ({ product, quantity = 1 }) => {
 }
 
 export default BuyNowButton
+
+
+
