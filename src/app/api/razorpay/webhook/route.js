@@ -17,6 +17,15 @@ export async function POST(req) {
 
   if (data.event === "payment.captured") {
     const { order_id, email, contact, amount } = data.payload.payment.entity;
+     const hashedEmail = crypto
+      .createHash("sha256")
+      .update(email.trim().toLowerCase())
+      .digest("hex");
+
+    const hashedPhone = crypto
+      .createHash("sha256")
+      .update(contact.trim())
+      .digest("hex");
 
     // CAPI purchase call
     await fetch(
@@ -32,8 +41,8 @@ export async function POST(req) {
               action_source: "server",
               event_source_url: "https://shopovix.store",
               user_data: {
-                em: [email],
-                ph: [contact],
+                em: [hashedEmail],
+                ph: [hashedPhone],
               },
               custom_data: {
                 currency: "INR",

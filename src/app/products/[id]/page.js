@@ -62,7 +62,7 @@ export default async function Page({ params }) {
                         </div>
                         <div className="flex items-center gap-2">
                             <RotateCcw className="w-4 h-4 text-emerald-600" />
-                            <span>30-Day Returns</span>
+                            <span>7-Day Returns</span>
                         </div>
                     </div>
                 </div>

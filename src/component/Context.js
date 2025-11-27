@@ -40,7 +40,7 @@ export const AppProvider = ({ children }) => {
   const addToCart = (product) => {
     console.log('🛒 Adding product to cart:', product);
         fbq('track', 'AddToCart', {
-    content_ids: [product._id],
+    content_ids: [product.id],
     value: product.price,
     currency: "INR",})
     setCart((prev) => {

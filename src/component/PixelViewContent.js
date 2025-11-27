@@ -6,7 +6,7 @@ export default function PixelViewContent({ product }) {
   useEffect(() => {
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "ViewContent", {
-        content_ids: [product._id],
+        content_ids: [product.id],
         content_name: product.title,
         value: product.variants?.[0]?.price || product.price,
         currency: "INR",

@@ -7,15 +7,17 @@ import NavSidebar from "@/component/NavSidebar";
 import Cart from "@/component/Cart";
 import Script from "next/script";
 import SessionWrapper from "@/component/SessionWrapper";
+import TrackingWrapper from "@/component/TrackingWrapper";
+import dynamic from "next/dynamic";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+// const Tracking = dynamic(() => import('@/component/Tracking'), { ssr: false });
 
 export const metadata = {
   metadataBase: new URL("https://www.shopovix.store"),
@@ -117,9 +119,11 @@ export default function RootLayout({ children }) {
 
         <SessionWrapper>
         <AppProvider>
+          {/* <Tracking/> */}
         <Navbar/>
           <NavSidebar/>
           <Cart/>
+          <TrackingWrapper/>
         {children}
         <Footer/>
         </AppProvider>

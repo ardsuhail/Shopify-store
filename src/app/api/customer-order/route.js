@@ -5,6 +5,53 @@ import Razorpay from "razorpay";
 import { NextResponse } from "next/server";
 import { createShiprocketOrder } from "../../../../utils/shiprocket";
 
+// --- FACEBOOK CAPI for COD Purchase ---
+import crypto from "crypto";
+
+async function sendCapiForCOD(order, body) {
+  try {
+    const hashedEmail = crypto
+      .createHash("sha256")
+      .update(order.email.trim().toLowerCase())
+      .digest("hex");
+
+    const hashedPhone = crypto
+      .createHash("sha256")
+      .update(order.customer.phone.trim())
+      .digest("hex");
+
+    await fetch(
+      `https://graph.facebook.com/v18.0/${process.env.META_PIXEL_ID}/events`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          data: [
+            {
+              event_name: "Purchase",
+              event_time: Math.floor(Date.now() / 1000),
+              action_source: "server",
+              event_source_url: "https://shopovix.store",
+              user_data: {
+                em: [hashedEmail],
+                ph: [hashedPhone],
+              },
+              custom_data: {
+                currency: "INR",
+                value: order.totalAmount || body.totalAmount || 0,
+              },
+            },
+          ],
+          access_token: process.env.META_CAPI_TOKEN,
+        }),
+      }
+    );
+
+    console.log("COD Purchase CAPI Sent ✔");
+  } catch (err) {
+    console.error("CAPI Error COD:", err);
+  }
+}
 
 export async function POST(req) {
   try {
@@ -97,6 +144,7 @@ export async function POST(req) {
 
       const order = await Order.create(orderData);
       const shiprocket = await createShiprocketOrder(order, customer);
+       await sendCapiForCOD(order, body);
       console.log("Shiprocket response:", shiprocket);
       if (shiprocket) {
         const shipment_id = shiprocket.shipment_id || shiprocket.data?.shipment_id || shiprocket.shipment?.shipment_id || "";
