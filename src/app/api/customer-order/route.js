@@ -4,23 +4,68 @@ import connectDB from "@/db/connectDB";
 import Razorpay from "razorpay";
 import { NextResponse } from "next/server";
 import { createShiprocketOrder } from "../../../../utils/shiprocket";
-
+import Event from "@/model/Event";
 // --- FACEBOOK CAPI for COD Purchase ---
 import crypto from "crypto";
 
+
 async function sendCapiForCOD(order, body) {
   try {
+    
+    
+    await connectDB();
+    
+    // Customer details get karo from Customer collection
+    const customer = await Customer.findById(order.customer);
+    
+    if (!customer) {
+      return;
+    }
+
+
+
     const hashedEmail = crypto
       .createHash("sha256")
-      .update(order.email.trim().toLowerCase())
+      .update(customer.email.trim().toLowerCase())
       .digest("hex");
 
     const hashedPhone = crypto
       .createHash("sha256")
-      .update(order.customer.phone.trim())
+      .update(customer.phone.trim())
       .digest("hex");
 
-    await fetch(
+    console.log('💾 Creating event in database...');
+    
+    // Event create karo
+    const eventData = {
+      sessionId: order.orderId,
+      type: "Purchase",
+      payload: {
+        orderId: order.orderId,
+        amount: order.totalAmount,
+        currency: "INR",
+        paymentMethod: "COD",
+        products: order.products,
+        customerEmail: customer.email,
+        customerPhone: customer.phone
+      },
+      utm: {
+        utm_source: body.utm_source || "",
+        utm_medium: body.utm_medium || "",
+        utm_campaign: body.utm_campaign || ""
+      },
+      fbclid: body.fbclid || "",
+      createdAt: new Date()
+    };
+
+
+    
+    const event = await Event.create(eventData);
+
+
+    // Facebook CAPI
+    console.log('📤 Sending Facebook CAPI...');
+    const capiResponse = await fetch(
       `https://graph.facebook.com/v18.0/${process.env.META_PIXEL_ID}/events`,
       {
         method: "POST",
@@ -47,12 +92,14 @@ async function sendCapiForCOD(order, body) {
       }
     );
 
-    console.log("COD Purchase CAPI Sent ✔");
+    const capiResult = await capiResponse.json();
+    console.log("✅ COD Purchase CAPI Sent:", capiResult);
+
   } catch (err) {
-    console.error("CAPI Error COD:", err);
+    console.error("❌ CAPI Error COD:", err);
+    console.error("Error details:", err.message);
   }
 }
-
 export async function POST(req) {
   try {
     await connectDB();
@@ -275,30 +322,3 @@ function getImageUrl(product) {
   return product.image?.url || product.image?.src || product.image || "";
 }
 
-// ✅ GET Latest Customer
-export async function GET(req) {
-  try {
-    await connectDB();
-
-    const customer = await Customer.find().sort({ createdAt: -1 });
-
-    if (!customer) {
-      return NextResponse.json({
-        success: false,
-        message: "No customer found"
-      });
-    }
-
-    return NextResponse.json({
-      success: true,
-      customer
-    });
-
-  } catch (err) {
-    console.error("GET Customer Error:", err);
-    return NextResponse.json({
-      success: false,
-      message: err.message
-    }, { status: 500 });
-  }
-}

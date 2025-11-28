@@ -124,7 +124,7 @@ const [productRatings, setProductRatings] = useState({});
       });
 
       const result = await response.json();
-      console.log("Wishlist operation result:", result);
+
 
       if (result.success) {
         setWishlist(prev =>

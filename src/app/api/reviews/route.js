@@ -63,12 +63,3 @@ export async function POST(req) {
 }
 
 
-export async function GET() {
-  try {
-    await connectDB();
-    const reviews = await Reviews.find().sort({ createdAt: -1 }); // latest first
-    return Response.json({ success: true, reviews });
-  } catch (error) {
-    return Response.json({ success: false, message: "Server error" });
-  }
-}

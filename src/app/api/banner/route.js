@@ -18,14 +18,7 @@ export async function POST(req) {
         const position = formData.get("position");
         const isActive = formData.get("isActive");
 
-        console.log("📥 FormData received:", {
-            hasImage: !!image,
-            imageType: image?.constructor?.name,
-            imageSize: image?.size,
-            altText,
-            position,
-            isActive
-        });
+
 
         if (!image) {
             console.error("❌ No image file received");
@@ -42,7 +35,7 @@ export async function POST(req) {
             }, { status: 400 });
         }
 
-        console.log("✅ Image file is valid, uploading to Cloudinary...");
+
         const buffer = Buffer.from(await image.arrayBuffer());
         const result = await new Promise((resolve, reject) => {
             const stream = cloudinary.uploader.upload_stream(

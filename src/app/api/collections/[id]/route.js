@@ -1,7 +1,7 @@
 export async function GET(request, { params }) {
     try {
         const { id } = params;
-        console.log("🟢 API Route - Collection ID:", id);
+
 
         // Shopify API call
         const response = await fetch(

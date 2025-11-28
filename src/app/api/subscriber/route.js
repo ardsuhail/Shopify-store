@@ -34,19 +34,3 @@ export async function POST(req) {
     }
 }
 
-export async function GET() {
-    try {
-        await connectDB();
-        const subscribers = await Subscriber.find().sort({ createdAt: -1 });
-        return NextResponse.json({
-            success: true,
-            subscribers,
-        }, { status: 200 });
-    } catch (error) {
-        console.error("Error fetching subscribers:", error);
-        return NextResponse.json({
-            success: false,
-            message: "Internal Server Error",
-        }, { status: 500 });
-    }
-}

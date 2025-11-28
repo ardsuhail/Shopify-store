@@ -1,3 +1,4 @@
+// model/Session.js
 import mongoose from "mongoose";
 
 const SessionSchema = new mongoose.Schema({
@@ -6,6 +7,10 @@ const SessionSchema = new mongoose.Schema({
   ua: String,
   referrer: String,
   url: String,
+  country: { type: String, default: 'Unknown' },
+  city: { type: String, default: 'Unknown' },
+  region: String,
+  timezone: String,
   utm: {
     utm_source: String,
     utm_medium: String,

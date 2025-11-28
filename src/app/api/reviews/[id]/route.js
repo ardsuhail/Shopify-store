@@ -22,19 +22,3 @@ export async function GET(req, { params }) {
 
 
 
-export async function DELETE(req, { params }) {
-  try {
-    await connectDB();
-    const { id } = await params;
-    if (!id) {
-      return new Response(JSON.stringify({ success: false, message: "Review ID is required" }), { status: 400 });
-    }
-    const deleteReview = await Reviews.findByIdAndDelete(id);
-    if (!deleteReview) {
-      return new Response(JSON.stringify({ success: false, message: "Review not found" }), { status: 404 });
-    }
-    return new Response(JSON.stringify({ success: true, message: "Review deleted successfully" }), { status: 200 });
-  } catch (err) {
-    return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500 });
-  }
-}
