@@ -54,11 +54,11 @@ export default async function Page({ params }) {
                     <div className="flex items-center justify-center gap-6 text-xs text-gray-600">
                         <div className="flex items-center gap-2">
                             <Truck className="w-4 h-4 text-emerald-600" />
-                            <span>Free Shipping Over $50</span>
+                            <span>Free Shipping </span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Shield className="w-4 h-4 text-emerald-600" />
-                            <span>2-Year Warranty</span>
+                            <span>Secure Checkout</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <RotateCcw className="w-4 h-4 text-emerald-600" />
@@ -190,7 +190,7 @@ export default async function Page({ params }) {
                             </div>
                             <div className="flex items-center gap-2 text-xs text-gray-600">
                                 <RotateCcw className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                                <span><strong>Easy Returns</strong> - 30-day money back guarantee</span>
+                                <span><strong>Easy Returns</strong> - 14-day money back guarantee</span>
                             </div>
                         </div>
                     </div>

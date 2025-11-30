@@ -125,22 +125,26 @@ fetch("/api/query", requestOptions)
     {
       icon: Shield,
       title: '100% Secure',
-      description: 'Your data is protected with encryption'
+      description: 'Your data is protected with encryption',
+       color: 'from-green-500 to-green-600'
     },
     {
       icon: Clock,
       title: '24/7 Support',
-      description: 'Round-the-clock customer service'
+      description: 'Round-the-clock customer service',
+         color: 'from-blue-500 to-blue-600'
     },
     {
       icon: CheckCircle,
       title: 'Quick Response',
-      description: 'Typically reply within 24 hours'
+      description: 'Typically reply within 24 hours',
+      color: 'from-purple-500 to-pink-600'
     },
     {
       icon: Users,
       title: 'Expert Team',
-      description: 'Trained professionals ready to help'
+      description: 'Trained professionals ready to help',
+        color: 'from-orange-500 to-red-600'
     }
   ]
 
@@ -202,7 +206,7 @@ fetch("/api/query", requestOptions)
             {trustFeatures.map((feature, index) => (
               <div key={index} className="text-center group">
                 <div className={`bg-gradient-to-r ${feature.color} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <feature.icon className="w-8 h-8 text-white" />
+                 <feature.icon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="font-bold text-gray-800 mb-2">{feature.title}</h3>
                 <p className="text-sm text-gray-600">{feature.description}</p>
@@ -433,10 +437,10 @@ fetch("/api/query", requestOptions)
               <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-3xl p-8 text-white text-center">
                 <h3 className="text-2xl font-bold mb-4">Why Customers Trust Us</h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
+                  {/* <div>
                     <div className="text-2xl font-bold mb-1">10K+</div>
                     <div className="text-sm opacity-90">Happy Customers</div>
-                  </div>
+                  </div> */}
                   <div>
                     <div className="text-2xl font-bold mb-1">98%</div>
                     <div className="text-sm opacity-90">Satisfaction Rate</div>

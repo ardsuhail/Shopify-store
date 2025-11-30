@@ -43,7 +43,7 @@ const FAQsPage = () => {
             {
                 id: 'order-1',
                 question: 'How can I place an order?',
-                answer: 'Placing an order is simple! Browse our collections, select your desired products, add them to your cart, and proceed to checkout. You will need to provide your shipping details and choose a payment method. We accept all major credit/debit cards, UPI, net banking, and wallet payments through Razorpay.'
+                answer: 'Placing an order is simple! Browse our collections,categories,or products listing page or search any product  select your desired products and click and proceed to checkout. You will need to provide your shipping details and choose a payment method. We accept all major credit/debit cards, UPI, net banking, and wallet payments through Razorpay.'
             },
             {
                 id: 'order-2',
@@ -102,7 +102,7 @@ const FAQsPage = () => {
             {
                 id: 'return-2',
                 question: 'How do I initiate a return?',
-                answer: 'To initiate a return: 1) Log into your account 2) Go to "Order History" 3) Select the order and item to return 4) Choose return reason 5) Submit request. Our team will approve within 24 hours and arrange pickup from your address. Returns are only accepted within 7 days of delivery.'
+                answer: 'To initiate a return:Contact our customer support by submiting contact form or  1) Log into your account  2) Go to "Order History" 3) Select the order and item to return 4) Choose return reason 5) Submit request. Our team will approve within 24 hours and arrange pickup from your address. Returns are only accepted within 7 days of delivery.'
             },
             {
                 id: 'return-3',
@@ -251,10 +251,10 @@ const FAQsPage = () => {
                                 <Clock className="w-4 h-4" />
                                 24/7 Customer Support
                             </div>
-                            <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30 flex items-center gap-2 text-sm">
+                            {/* <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30 flex items-center gap-2 text-sm">
                                 <CheckCircle className="w-4 h-4" />
                                 Trusted by 10K+ Customers
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </section>

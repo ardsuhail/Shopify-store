@@ -5,11 +5,14 @@ import { useState, useEffect,useRef } from "react";
 import { getCollections } from "@/server/actions/getCollections";
 import { getFeaturedProducts } from "@/server/actions/getFeaturedProducts";
 import getTrendingProducts from "@/server/actions/getTrendingProducts";
-import { ShoppingCart, Heart, Star,User,Shield,Truck,CheckCircle,ChevronUp,ChevronDown } from "lucide-react";
-
+import { ShoppingCart, Heart,User,Shield,Truck,CheckCircle,ChevronUp,ChevronDown, Star, Phone, RefreshCcw, Lock,Award,RefreshCw } from "lucide-react";
+    
 import { useAppContext } from '@/component/Context'
 import HeroSection from "@/component/HeroSection";
 import ReactStars from "react-stars";
+import MidBanner,{ BottomBanner } from "@/component/AllBanners";
+
+
 export default function HomePage() {
   const [collections, setCollections] = useState([])
   const [featuredProducts, setFeaturedProducts] = useState([])
@@ -26,6 +29,7 @@ const [showAll, setShowAll] = useState(false);
 
 const [productRatings, setProductRatings] = useState({});
   const { addToCart } = useAppContext();
+
 
   // Fetch collections
   useEffect(() => {
@@ -157,121 +161,10 @@ const [productRatings, setProductRatings] = useState({});
       const averageRating = (reviews.length > 0 ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length : 0).toFixed(1)
 
 
-  const testimonials = [
-    {
-      name: "Priya Nair",
-      comment: "The quality is just amazing! Product looks even better than the photos. Packaging was so secure and delivery was super fast. Will definitely order again!",
-      rating: 5,
-      purchaseTime: "Bought 2 weeks ago",
-      tags: ["Quality Checked", "Fast Delivery"],
-      isTop: true
-    },
-    {
-      name: "Rahul Mehta",
-      comment: "Bahut accha product hai! Quality bilkul premium hai. Customer support bhi bahut helpful thi. Overall ek dum perfect experience.",
-      rating: 5,
-      purchaseTime: "Purchased last month",
-      tags: ["Authentic Product", "Quality Checked"],
-      isTop: true
-    },
-    {
-      name: "Ananya Reddy",
-      comment: "Absolutely loved it! The product feels so premium and the finishing is flawless. Delivery was faster than expected. Highly recommended!",
-      rating: 5,
-      purchaseTime: "Bought 3 days ago",
-      tags: ["Fast Delivery", "Premium Quality"],
-      isTop: true
-    },
-    {
-      name: "Karan Singh",
-      comment: "Maza aa gaya! Product quality top-notch hai aur delivery time se pehle mil gaya. Packing bhi bahut acchi thi.",
-      rating: 5,
-      purchaseTime: "Purchased 2 weeks ago",
-      tags: ["Fast Delivery", "Secure Packaging"]
-    },
-    {
-      name: "Neha Kapoor",
-      comment: "This store never disappoints. Third order and everything was perfect as always. The quality is consistently good.",
-      rating: 5,
-      purchaseTime: "Bought 1 month ago",
-      tags: ["Verified Seller", "Quality Checked"]
-    },
-    {
-      name: "Vikram Joshi",
-      comment: "Excellent product! The build quality is much better than I expected for the price. Very happy with my purchase.",
-      rating: 5,
-      purchaseTime: "Purchased 3 weeks ago",
-      tags: ["Value for Money", "Quality Checked"]
-    },
-    {
-      name: "Sneha Iyer",
-      comment: "Product accha hai but delivery thoda late hua. Lekin customer care ne immediately resolve kar diya. Overall satisfied!",
-      rating: 5,
-      purchaseTime: "Bought 2 weeks ago",
-      tags: ["Good Support", "Quality Product"]
-    },
-    {
-      name: "Arjun Malhotra",
-      comment: "Simply outstanding! The attention to detail is impressive. Feels like a luxury product without the luxury price tag.",
-      rating: 5,
-      purchaseTime: "Purchased 5 days ago",
-      tags: ["Premium Quality", "Great Value"]
-    },
-    {
-      name: "Pooja Sharma",
-      comment: "Loved it! Photos se better dikhta hai actual product. Color and finish both are perfect. Very happy customer!",
-      rating: 5,
-      purchaseTime: "Bought 1 week ago",
-      tags: ["Accurate Description", "Great Quality"]
-    },
-    {
-      name: "Rohan Kumar",
-      comment: "Best online shopping experience ever! Product quality, packaging, delivery - sab kuch perfect tha. Definitely coming back.",
-      rating: 5,
-      purchaseTime: "Purchased 2 months ago",
-      tags: ["Perfect Experience", "Recommended"]
-    },
-    {
-      name: "Meera Patel",
-      comment: "Quality bahut acchi hai! Product exactly description ke hisaab se aaya. Delivery bhi time par hui. Thank you!",
-      rating: 5,
-      purchaseTime: "Bought 3 weeks ago",
-      tags: ["As Described", "On Time Delivery"]
-    },
-    {
-      name: "Amit Desai",
-      comment: "Super fast delivery and the product quality is exceptional. Worth every penny. Will recommend to friends and family.",
-      rating: 5,
-      purchaseTime: "Purchased 4 days ago",
-      tags: ["Fast Delivery", "Excellent Quality"]
-    },
-    {
-      name: "Sunita R.",
-      comment: "First time order kiya aur bahut khush hoon. Product quality premium hai aur packaging bhi bahut secure thi.",
-      rating: 5,
-      purchaseTime: "Bought 2 weeks ago",
-      tags: ["First Time Buyer", "Impressed"]
-    },
-    {
-      name: "Rajiv Menon",
-      comment: "Excellent craftsmanship! The product feels durable and well-made. Delivery was prompt and packaging was secure.",
-      rating: 5,
-      purchaseTime: "Purchased 1 month ago",
-      tags: ["Durable", "Well Made"]
-    },
-    {
-      name: "Anjali G.",
-      comment: "Product aaj tak ka best online purchase hai! Quality outstanding hai aur delivery super fast. Love it!",
-      rating: 5,
-      purchaseTime: "Bought 1 week ago",
-      tags: ["Outstanding", "Fast Delivery"]
-    }
-  ];
-const visibleTestimonials = showAll ? testimonials : testimonials.slice(0, 6);
 
-  const topReviews = testimonials.filter(t => t.isTop);
-  const regularReviews = testimonials.filter(t => !t.isTop);
-  const visibleReviews = showAll ? testimonials : [...topReviews, ...regularReviews.slice(0, 3)];
+
+
+ 
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -392,116 +285,145 @@ const visibleTestimonials = showAll ? testimonials : testimonials.slice(0, 6);
         </div>
       </section>
 
-      {/* 🛒 Shop by Category */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="text-center mb-12 sm:mb-16">
-          <div className="relative inline-block mb-6">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 relative z-10">
-              Shop By Category
-            </h2>
-            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"></div>
-          </div>
+     {/* 🛒 Shop by Category */}
+<section className="pt-16 pb-5 sm:pt-20 sm:pb-5 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <div className="text-start mb-12 sm:mb-16">
+    <div className="relative inline-block mb-6">
+      <h2 className="text-3xl  sm:text-4xl lg:text-5xl font-bold text-gray-900  relative z-10">
+        Shop By Category
+      </h2>
+      {/* <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"></div> */}
+    </div>
 
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-            Explore our carefully curated collections designed for every aspect of your modern lifestyle
-          </p>
+    <p className=" sm:text-lg lg:text-xl text-gray-600  mx-auto mb-8 leading-relaxed">
+      Explore our carefully curated collections designed for every aspect of your modern lifestyle
+    </p>
 
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-10 sm:mb-12">
-            <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 rounded-lg border border-emerald-100">
-              <span className="text-emerald-600">⭐</span>
-              <span className="text-sm font-medium text-emerald-700">Premium Quality</span>
-            </div>
-            <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg border border-blue-100">
-              <span className="text-blue-600">🚚</span>
-              <span className="text-sm font-medium text-blue-700">Fast Shipping</span>
-            </div>
-            <div className="flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg border border-purple-100">
-              <span className="text-purple-600">↩️</span>
-              <span className="text-sm font-medium text-purple-700">Easy Returns</span>
-            </div>
-            <div className="flex items-center gap-2 px-3 py-2 bg-green-50 rounded-lg border border-green-100">
-              <span className="text-green-600">🛡️</span>
-              <span className="text-sm font-medium text-green-700">Secure Payment</span>
-            </div>
-          </div>
+  </div>
+
+  {/* Categories Grid - Mobile Scroll & Desktop Grid */}
+  <div className="mb-7 sm:mb-5">
+    {/* Mobile View - Horizontal Scroll */}
+    <div className="lg:hidden flex gap-4  overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+      {loading ? (
+        <div className="flex justify-center items-center w-full py-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
         </div>
+      ) : (
+        collections
+          .filter((item) =>
+            item.title.toLowerCase() !== "featured collection" &&
+            item.title.toLowerCase() !== "trending products"
+          )
+          .slice(0, 7)
+          .map((item) => (
+            <div key={item.id} className="flex-shrink-0 w-48">
+              <Link
+                href={`/collections/${item.id}`}
+                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 cursor-pointer transform hover:-translate-y-2 border border-gray-100 relative block"
+              >
+                <div className="relative overflow-hidden aspect-[4/3]">
+                  <img
+                    src={item.image?.src}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                    <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16">
-          {loading ? (
-            <div className="col-span-2 lg:col-span-4 flex flex-col justify-center items-center">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-500 text-sm mt-2">We&apos;re fetching collections..</p>
+                <div className="p-4 text-center">
+                  <h3 className="font-bold text-gray-900 group-hover:text-emerald-600 transition-colors duration-300 text-sm mb-2 line-clamp-2">
+                    {item.title}
+                  </h3>
+                  
+                </div>
+              </Link>
             </div>
-          ) : (
-            <>
-              {collections
-                .filter((item) =>
-                  item.title.toLowerCase() !== "featured collection" &&
-                  item.title.toLowerCase() !== "trending products"
-                )
-                .slice(0, 4)
-                .map((item) => (
-                  <Link
-                    href={`/collections/${item.id}`}
-                    key={item.id}
-                    className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 cursor-pointer transform hover:-translate-y-2 border border-gray-100 relative"
-                  >
-                    <div className="relative overflow-hidden aspect-[4/3]">
-                      <img
-                        src={item.image?.src}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                        <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
+          ))
+      )}
+    </div>
 
-                    <div className="p-4 sm:p-5 text-center">
-                      <h3 className="font-bold text-gray-900 group-hover:text-emerald-600 transition-colors duration-300 text-sm sm:text-base lg:text-lg mb-2 line-clamp-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-500 text-xs sm:text-sm font-medium">
-                        Shop Collection
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-            </>
-          )}
+    {/* Desktop View - 7 Cards Grid */}
+    <div className="hidden lg:grid grid-cols-7 gap-6">
+      {loading ? (
+        <div className="col-span-7 flex justify-center items-center ">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
         </div>
-
-        <div className="text-center">
-          <Link
-            href="/collections"
-            className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-8 py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group"
-          >
-            <span>View All Collections</span>
-            <svg
-              className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+      ) : (
+        collections
+          .filter((item) =>
+            item.title.toLowerCase() !== "featured collection" &&
+            item.title.toLowerCase() !== "trending products"
+          )
+          .slice(0, 7)
+          .map((item) => (
+            <Link
+              href={`/collections/${item.id}`}
+              key={item.id}
+              className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 cursor-pointer transform hover:-translate-y-2 border border-gray-100 relative"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
+              <div className="relative overflow-hidden aspect-[4/3]">
+                <img
+                  src={item.image?.src}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                  <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
 
-          <p className="text-gray-500 text-sm mt-6 flex items-center justify-center gap-2">
-            <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-            Trusted by 10,000+ customers
-          </p>
-        </div>
-      </section>
+              <div className="p-4 text-center">
+                <h3 className="font-bold text-gray-900 group-hover:text-emerald-600 transition-colors duration-300 text-sm mb-2 line-clamp-2">
+                  {item.title}
+                </h3>
+                <p className="text-gray-500 text-xs font-medium">
+                  Shop Collection
+                </p>
+              </div>
+            </Link>
+          ))
+      )}
+    </div>
+  </div>
 
+  {/* View All Button - Centered with better spacing */}
+  <div className="text-center ">
+    <Link
+      href="/collections"
+      className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-10 py-4 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group border border-emerald-400/30"
+    >
+      <span>View All Categories</span>
+      <svg
+        className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg>
+    </Link>
+  </div>
+</section>
+      {/* mid discount/offer banner */}
+  <section>
+    
+   
+      <MidBanner/>
+    
+      
+  </section>
       {/* 🏷️ Featured Products */}
       <section className="py-3 sm:py-16 px-6 max-w-6xl mx-auto">
-        <div className="text-center mb-12">
+        <div className=" text-start  mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             Featured Products
           </h2>
@@ -565,11 +487,11 @@ const visibleTestimonials = showAll ? testimonials : testimonials.slice(0, 6);
 
       {/* 🔥 Trending Now */}
     <section className="py-5 px-1 md:px-6 max-w-7xl mx-auto">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-          Trending Now
+      <div className="text-start mb-12">
+        <h2 className=" text-2xl md:text-4xl font-bold text-gray-900 mb-1 bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
+          Trending on Shopovix
         </h2>
-        <p className="text-gray-600 text-lg font-light">Discover what&apos;s captivating our community</p>
+        <p className="text-gray-600 text-[16px] font-light">Discover what&apos;s captivating our community</p>
       </div>
 
       {loading ? (
@@ -724,149 +646,117 @@ const visibleTestimonials = showAll ? testimonials : testimonials.slice(0, 6);
         </>
       )}
     </section>
-      {/* 👥 Premium Testimonials Section */}
-      <section 
-      ref={sectionRef}
-      className="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-20 relative overflow-hidden"
-    >
-      {/* Background Elements */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25px 25px, rgba(255,255,255,0.3) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(255,255,255,0.3) 2%, transparent 0%)`,
-          backgroundSize: "100px 100px"
-        }}></div>
-      </div>
+     
+  <BottomBanner/>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Loved by{" "}
-            <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-              Thousands
-            </span>
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            Join 10,000+ satisfied customers who trust us for quality products and exceptional service
-          </p>
-          
-          {/* Trust Bar */}
-          <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-lg rounded-2xl px-8 py-4 border border-white/20">
-            <div className="flex items-center gap-2">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
-              ))}
-              <span className="text-white font-bold text-lg">4.8/5</span>
-            </div>
-            <div className="w-px h-8 bg-white/20"></div>
-            <span className="text-white font-medium">10,000+ Verified Customers</span>
+
+<section className="py-16 bg-gradient-to-br from-gray-50 to-white">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 className="text-start sm:text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-12  ">
+      Why Choose Us
+    </h2>
+    
+    {/* Scrolling Features */}
+    <div className="relative overflow-hidden">
+      <div className="flex animate-scroll">
+        {/* Duplicate items for seamless loop */}
+        {[...Array(2)].map((_, setIndex) => (
+          <div key={setIndex} className="flex gap-6 pr-6">
+            {[
+              { 
+                icon: "Truck", 
+                label: "Fast Delivery",
+                color: "from-blue-500 to-cyan-500",
+                desc: "24-48 Hours Delivery"
+              },
+              { 
+                icon: "Lock", 
+                label: "Secure Checkout",
+                color: "from-green-500 to-emerald-500",
+                desc: "SSL Encrypted"
+              },
+              { 
+                icon: "Award", 
+                label: "Premium Quality",
+                color: "from-purple-500 to-pink-500",
+                desc: "100% Authentic"
+              },
+              { 
+                icon: "Phone", 
+                label: "24/7 Support",
+                color: "from-orange-500 to-red-500",
+                desc: "Always Available"
+              },
+              { 
+                icon: "RefreshCw", 
+                label: "Easy Returns",
+                color: "from-indigo-500 to-blue-500",
+                desc: "7-Day Policy"
+              }
+            ].map((item, index) => (
+              <div
+                key={`${setIndex}-${index}`}
+                className="flex-shrink-0 w-64 mb-4 bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${item.color} flex items-center justify-center mb-4 mx-auto`}>
+                  {/* Lucide React Icons with proper styling */}
+                  {item.icon === "Truck" && (
+                    <Truck className="w-7 h-7 text-white" strokeWidth={2} />
+                  )}
+                  {item.icon === "Lock" && (
+                    <Lock className="w-7 h-7 text-white" strokeWidth={2} />
+                  )}
+                  {item.icon === "Award" && (
+                    <Award className="w-7 h-7 text-white" strokeWidth={2} />
+                  )}
+                  {item.icon === "Phone" && (
+                    <Phone className="w-7 h-7 text-white" strokeWidth={2} />
+                  )}
+                  {item.icon === "RefreshCw" && (
+                    <RefreshCw className="w-7 h-7 text-white" strokeWidth={2} />
+                  )}
+                </div>
+                
+                <div className="text-center">
+                  <h3 className="text-lg font-bold text-gray-800 mb-2">
+                    {item.label}
+                  </h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-
-        {/* Trust Labels */}
-        <div className={`flex flex-wrap justify-center gap-4 mb-12 transition-all duration-1000 delay-300 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <TrustBadge icon={Shield} text="Quality Checked" />
-          <TrustBadge icon={Truck} text="Fast Delivery" />
-          <TrustBadge icon={CheckCircle} text="Authentic Product" />
-          <TrustBadge icon={Shield} text="Secure Payment" />
-        </div>
-
-        {/* Testimonials Grid */}
-        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 transition-all duration-1000 delay-500 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          {visibleReviews.map((testimonial, index) => (
-            <div
-              key={index}
-              className={`bg-white/10 backdrop-blur-lg rounded-2xl p-6 border transition-all duration-500 hover:-translate-y-2 ${
-                testimonial.isTop 
-                  ? 'border-amber-400/40 shadow-lg shadow-amber-400/10' 
-                  : 'border-white/20 hover:border-amber-400/30'
-              }`}
-            >
-              {/* Rating */}
-              <div className="flex mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-5 h-5 fill-amber-400 text-amber-400"
-                  />
-                ))}
-              </div>
-
-              {/* Comment */}
-              <p className="text-gray-200 leading-relaxed mb-6 text-lg italic">
-                &quot;{testimonial.comment}&quot;
-              </p>
-
-              {/* User Info */}
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-500">
-                    <span className="text-white font-bold text-sm">
-                      {testimonial.name.split(' ').map(n => n[0]).join('')}
-                    </span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white text-lg">{testimonial.name}</h4>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-green-400 text-sm font-medium flex items-center gap-1">
-                        <CheckCircle className="w-4 h-4" />
-                        Verified Customer
-                      </span>
-                    </div>
-                    <p className="text-gray-400 text-sm mt-1">{testimonial.purchaseTime}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mt-4">
-                {testimonial.tags.map((tag, tagIndex) => (
-                  <span
-                    key={tagIndex}
-                    className="bg-amber-400/20 text-amber-300 px-2 py-1 rounded-full text-xs font-medium border border-amber-400/30"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* Top Review Badge */}
-              {testimonial.isTop && (
-                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                  Top Review
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Show More/Less Button */}
-        <div className="text-center">
-          <button
-            onClick={() => setShowAll(!showAll)}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group"
-          >
-            {showAll ? (
-              <>
-                Show Less
-                <ChevronUp className="w-5 h-5 transform group-hover:-translate-y-1 transition-transform" />
-              </>
-            ) : (
-              <>
-                Read More Reviews
-                <ChevronDown className="w-5 h-5 transform group-hover:translate-y-1 transition-transform" />
-              </>
-            )}
-          </button>
-        </div>
+        ))}
       </div>
-    </section>
+      
+      {/* Gradient overlays for smooth edges */}
+      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-50 to-transparent z-10"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-50 to-transparent z-10"></div>
+    </div>
+  </div>
+
+  <style jsx>{`
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+    .animate-scroll {
+      animation: scroll 30s linear infinite;
+      display: flex;
+      width: max-content;
+    }
+    .animate-scroll:hover {
+      animation-play-state: paused;
+    }
+  `}</style>
+</section>
+
     </div>
   );
 }
@@ -900,3 +790,146 @@ const visibleTestimonials = showAll ? testimonials : testimonials.slice(0, 6);
 //     </div>
 //   );
 // }
+
+    // {/* <section 
+    //   ref={sectionRef}
+    //   className="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-20 relative overflow-hidden"
+    // >
+    //   {/* Background Elements */}
+    //   <div className="absolute inset-0 opacity-5">
+    //     <div className="absolute inset-0" style={{
+    //       backgroundImage: `radial-gradient(circle at 25px 25px, rgba(255,255,255,0.3) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(255,255,255,0.3) 2%, transparent 0%)`,
+    //       backgroundSize: "100px 100px"
+    //     }}></div>
+    //   </div>
+
+    //   <div className="max-w-7xl mx-auto px-6 relative z-10">
+    //     {/* Section Header */}
+    //     <div className={`text-center mb-16 transition-all duration-1000 ${
+    //       isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+    //     }`}>
+    //       <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+    //         Loved by{" "}
+    //         <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+    //           Thousands
+    //         </span>
+    //       </h2>
+    //       <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
+    //         Join 10,000+ satisfied customers who trust us for quality products and exceptional service
+    //       </p>
+          
+    //       {/* Trust Bar */}
+    //       <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-lg rounded-2xl px-8 py-4 border border-white/20">
+    //         <div className="flex items-center gap-2">
+    //           {[...Array(5)].map((_, i) => (
+    //             <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
+    //           ))}
+    //           <span className="text-white font-bold text-lg">4.8/5</span>
+    //         </div>
+    //         <div className="w-px h-8 bg-white/20"></div>
+    //         <span className="text-white font-medium">10,000+ Verified Customers</span>
+    //       </div>
+    //     </div>
+
+    //     {/* Trust Labels */}
+    //     <div className={`flex flex-wrap justify-center gap-4 mb-12 transition-all duration-1000 delay-300 ${
+    //       isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+    //     }`}>
+    //       <TrustBadge icon={Shield} text="Quality Checked" />
+    //       <TrustBadge icon={Truck} text="Fast Delivery" />
+    //       <TrustBadge icon={CheckCircle} text="Authentic Product" />
+    //       <TrustBadge icon={Shield} text="Secure Payment" />
+    //     </div>
+
+    //     {/* Testimonials Grid */}
+    //     <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 transition-all duration-1000 delay-500 ${
+    //       isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+    //     }`}>
+    //       {visibleReviews.map((testimonial, index) => (
+    //         <div
+    //           key={index}
+    //           className={`bg-white/10 backdrop-blur-lg rounded-2xl p-6 border transition-all duration-500 hover:-translate-y-2 ${
+    //             testimonial.isTop 
+    //               ? 'border-amber-400/40 shadow-lg shadow-amber-400/10' 
+    //               : 'border-white/20 hover:border-amber-400/30'
+    //           }`}
+    //         >
+    //           {/* Rating */}
+    //           <div className="flex mb-4">
+    //             {[...Array(testimonial.rating)].map((_, i) => (
+    //               <Star
+    //                 key={i}
+    //                 className="w-5 h-5 fill-amber-400 text-amber-400"
+    //               />
+    //             ))}
+    //           </div>
+
+    //           {/* Comment */}
+    //           <p className="text-gray-200 leading-relaxed mb-6 text-lg italic">
+    //             &quot;{testimonial.comment}&quot;
+    //           </p>
+
+    //           {/* User Info */}
+    //           <div className="flex items-start justify-between">
+    //             <div className="flex items-center gap-4">
+    //               <div className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-500">
+    //                 <span className="text-white font-bold text-sm">
+    //                   {testimonial.name.split(' ').map(n => n[0]).join('')}
+    //                 </span>
+    //               </div>
+    //               <div>
+    //                 <h4 className="font-bold text-white text-lg">{testimonial.name}</h4>
+    //                 <div className="flex items-center gap-2 mt-1">
+    //                   <span className="text-green-400 text-sm font-medium flex items-center gap-1">
+    //                     <CheckCircle className="w-4 h-4" />
+    //                     Verified Customer
+    //                   </span>
+    //                 </div>
+    //                 <p className="text-gray-400 text-sm mt-1">{testimonial.purchaseTime}</p>
+    //               </div>
+    //             </div>
+    //           </div>
+
+    //           {/* Tags */}
+    //           <div className="flex flex-wrap gap-2 mt-4">
+    //             {testimonial.tags.map((tag, tagIndex) => (
+    //               <span
+    //                 key={tagIndex}
+    //                 className="bg-amber-400/20 text-amber-300 px-2 py-1 rounded-full text-xs font-medium border border-amber-400/30"
+    //               >
+    //                 {tag}
+    //               </span>
+    //             ))}
+    //           </div>
+
+    //           {/* Top Review Badge */}
+    //           {testimonial.isTop && (
+    //             <div className="absolute -top-2 -right-2 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+    //               Top Review
+    //             </div>
+    //           )}
+    //         </div>
+    //       ))}
+    //     </div>
+
+    //     {/* Show More/Less Button */}
+    //     <div className="text-center">
+    //       <button
+    //         onClick={() => setShowAll(!showAll)}
+    //         className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group"
+    //       >
+    //         {showAll ? (
+    //           <>
+    //             Show Less
+    //             <ChevronUp className="w-5 h-5 transform group-hover:-translate-y-1 transition-transform" />
+    //           </>
+    //         ) : (
+    //           <>
+    //             Read More Reviews
+    //             <ChevronDown className="w-5 h-5 transform group-hover:translate-y-1 transition-transform" />
+    //           </>
+    //         )}
+    //       </button>
+    //     </div>
+    //   </div>
+    // {/* </section> */} 

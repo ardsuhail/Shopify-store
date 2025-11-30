@@ -3,7 +3,18 @@ import React from 'react'
 import Link from 'next/link'
 import { Github, Instagram, Facebook, Mail, Phone, MapPin, Shield, Truck, CreditCard, Gift } from 'lucide-react'
 import NewsLatter from './NewsLatter'
-
+import { 
+  SiVisa, 
+  SiMastercard, 
+  SiPaypal, 
+  SiAmericanexpress,
+  SiGooglepay,
+  SiPhonepe,
+  SiRazorpay,
+  SiAmazonpay,
+  SiPaytm,
+  SiUpcloud
+} from "react-icons/si";
 const Footer = () => {
     return (
         <footer className="bg-gradient-to-br from-slate-100 to-slate-300 text-gray-800 relative overflow-hidden">
@@ -18,8 +29,8 @@ const Footer = () => {
             {/* Trust Badges Section */}
             <div className="relative bg-white/80 backdrop-blur-sm border-b border-gray-200 py-6">
                 <div className="container mx-auto px-6">
-                    <div className="flex flex-col items-center text-center mb-6">
-                        <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
+                    <div className="flex flex-col  text-start md:text-center mb-6">
+                        <h3 className="text-lg md:text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
                             Trusted & Secure Shopping
                         </h3>
                         <p className="text-gray-600 text-sm">100% Safe & Secure Payments</p>
@@ -53,46 +64,131 @@ const Footer = () => {
                 </div>
             </div>
 
-            {/* Payment Methods */}
-            <div className="relative bg-gradient-to-r from-emerald-500 to-teal-600 py-4">
-                <div className="container mx-auto px-6">
-                    <div className="flex flex-col items-center mb-4">
-                        <h4 className="text-white font-semibold text-sm mb-3">WE ACCEPT</h4>
-                    </div>
-                    <div className="flex justify-center items-center gap-6 flex-wrap">
-                        <div className="bg-white p-2 rounded-lg shadow-sm">
-                            <img src="/visa.svg" alt="Visa" className="h-6" />
-                        </div>
-                        <div className="bg-white p-2 rounded-lg shadow-sm">
-                            <img 
-                                src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" 
-                                alt="Mastercard" 
-                                className="h-6" 
-                            />
-                        </div>
-                        <div className="bg-white p-2 rounded-lg shadow-sm">
-                            <img 
-                                src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" 
-                                alt="Paypal" 
-                                className="h-6" 
-                            />
-                        </div>
-                        <div className="bg-white p-2 rounded-lg shadow-sm">
-                            <div className="flex items-center gap-1 text-xs font-semibold text-gray-800">
-                                <CreditCard className="w-4 h-4" />
-                                AMEX
-                            </div>
-                        </div>
-                        <div className="bg-white p-2 rounded-lg shadow-sm">
-                            <div className="flex items-center gap-1 text-xs font-semibold text-gray-800">
-                                <Gift className="w-4 h-4" />
-                                Gift Cards
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        {/* Payment Methods */}
 
+
+{/* Payment Methods */}
+<div className="relative bg-gradient-to-r from-slate-800 to-slate-900 py-8 border-t border-b border-gray-700">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center mb-6">
+            <h4 className="text-white font-semibold text-sm uppercase tracking-wider mb-2 text-gray-300">
+                Secure Payment Methods
+            </h4>
+            <p className="text-gray-400 text-xs">100% Safe & Encrypted Transactions</p>
+        </div>
+        
+        <div className="relative overflow-hidden">
+            <div className="flex animate-scroll justify-center items-center gap-8">
+                {/* Duplicate for seamless loop */}
+                {[...Array(2)].map((_, setIndex) => (
+                    <div key={setIndex} className="flex gap-8 pr-8">
+                        {/* Visa */}
+                        <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                            <div className="w-20 h-12 flex items-center justify-center">
+                                <SiVisa className="text-3xl  w-14 h-14 text-blue-900" />
+                            </div>
+                        </div>
+                        
+                        {/* Mastercard */}
+                        <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                            <div className="w-20 h-12 flex items-center justify-center">
+                                <SiMastercard className=" w-14 h-14 text-red-600" />
+                            </div>
+                        </div>
+                        
+                        {/* PayPal */}
+                        <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                            <div className="w-20 h-12 flex items-center justify-center">
+                                <SiPaypal className=" w-14 h-14 text-blue-700" />
+                            </div>
+                        </div>
+                        
+                        {/* American Express */}
+                        <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                            <div className="w-20 h-12 flex items-center justify-center">
+                                <div className="text-blue-800 flex gap-1 items-center justify-center">
+                                    <CreditCard className="w-8 h-8 mb-1" />
+                                    <span className="text-lg font-bold">AMEX</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Razorpay */}
+                        <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                            <div className="w-20 h-12 flex items-center justify-center">
+                                <SiRazorpay className=" w-14 h-14 text-blue-600" />
+                            </div>
+                        </div>
+                        
+                        {/* PhonePe */}
+                        <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                            <div className="w-20 h-12 flex items-center justify-center">
+                                <SiPhonepe className=" w-14 h-14 text-purple-600" />
+                            </div>
+                        </div>
+                        
+                        {/* Google Pay */}
+                        <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                            <div className="w-20 h-12 flex items-center justify-center">
+                                <SiGooglepay className=" w-15 h-15 text-black" />
+                            </div>
+                        </div>
+                        
+                        {/* UPI */}
+                        <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                            <div className="w-20 h-12 flex items-center justify-center">
+                                <div className="text-green-600 flex gap-1 items-center justify-center">
+                                    <svg className="w-8 h-8 mb-1" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                    </svg>
+                                    <span className="text-lg font-bold">UPI</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            
+            {/* Gradient overlays */}
+            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-slate-800 to-transparent z-10"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-slate-800 to-transparent z-10"></div>
+        </div>
+        
+        <div className="flex justify-center items-center gap-4 mt-6">
+            <div className="flex items-center gap-2 text-gray-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span className="text-xs">SSL Secure</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span className="text-xs">256-bit Encryption</span>
+            </div>
+        </div>
+    </div>
+
+    <style jsx>{`
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        .animate-scroll {
+            animation: scroll 25s linear infinite;
+            display: flex;
+            width: max-content;
+        }
+        .animate-scroll:hover {
+            animation-play-state: paused;
+        }
+    `}</style>
+</div>
             {/* Main Footer Content */}
             <div className="relative container mx-auto px-6 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
@@ -131,7 +227,7 @@ const Footer = () => {
                         </h3>
                         <ul className="space-y-3">
                             {[
-                                { href: "/about-Us", label: "About Us" },
+                                { href: "/about", label: "About Us" },
                                 { href: "/products", label: "Shop All" },
                                 { href: "/collections", label: "Categories" },
                                 { href: "/contact", label: "Contact Us" },
@@ -191,7 +287,7 @@ const Footer = () => {
                             <div className="flex gap-4">
                                 {[
                                     { href: "https://www.instagram.com/shopovix", icon: Instagram, color: "hover:text-pink-500" },
-                                    { href: "https://www.facebook.com/shopovix", icon: Facebook, color: "hover:text-blue-600" },
+                                    { href: "https://www.facebook.com/profile.php?id=61575117012652", icon: Facebook, color: "hover:text-blue-600" },
                                     { href: "https://github.com", icon: Github, color: "hover:text-gray-700" }
                                 ].map((social, index) => (
                                     <Link

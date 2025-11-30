@@ -2,13 +2,28 @@
 import React, { useState, useEffect } from 'react'
 import { LoaderCircle } from 'lucide-react'
 
+
 const NewsLatter = () => {
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
-
+    const [message, setMessage] = useState("")
+    const [error, setError] = useState("")
     const handleSubmit = (e) => {
         e.preventDefault();
+     
+    if (!email) {
+            setError("Please enter your email address")
+            return
+        }
+
+        if (!/\S+@\S+\.\S+/.test(email)) {
+            setError("Please enter a valid email address")
+            return
+        }
+
         setLoading(true);
+        setError("");
+        setMessage("");
 
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -29,19 +44,22 @@ const NewsLatter = () => {
             .then((result) => {
                 if(result.success){
                     setLoading(false);
-                    alert("Subscribed successfully!");
+                    setMessage("Subscribed successfully!");
                     setEmail('');
+                    setError("")
                 } else {
                     setLoading(false);
-                    alert(`Subscription failed: ${result.message}`);
+                    setError(`Subscription failed: ${result.message}`);
+                    setMessage("")
                 }
 
                 console.log(result)
             })
             .catch((error) => {
                 setLoading(false);
-                alert("An error occurred. Please try again later..");
+                setError("An error occurred. Please try again later..");
                 console.error(error)
+                setMessage("")
             });
 
     }
@@ -64,6 +82,17 @@ const NewsLatter = () => {
                                    </div>:"Join"} 
                                 </button>
                             </form>
+                           {message && (
+                    <div className="p-3 bg-green-50  mt-2 border border-green-200 rounded-lg">
+                        <p className="text-sm text-green-700 font-medium">{message}</p>
+                    </div>
+                )}
+                
+                {error && (
+                    <div className="p-3 bg-red-50  mt-2 border border-red-200 rounded-lg">
+                        <p className="text-sm text-red-700 font-medium">{error}</p>
+                    </div>
+                )}
                         </div>
         </>
     )

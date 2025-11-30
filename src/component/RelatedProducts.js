@@ -231,7 +231,7 @@ export default async function RelatedProducts({ currentProduct, currentProductId
                     <div className="flex flex-col items-center">
                         <RotateCcw className="w-8 h-8 text-emerald-600 mb-2" />
                         <h4 className="font-semibold text-gray-900">Easy Returns</h4>
-                        <p className="text-sm text-gray-600">30-day guarantee</p>
+                        <p className="text-sm text-gray-600">7-day guarantee</p>
                     </div>
                 </div>
             </div>

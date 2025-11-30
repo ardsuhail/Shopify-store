@@ -115,7 +115,7 @@ const ProfilePage = () => {
    useEffect(() => {
       const fetchOrders = async () => {
         try {
-          if (!session?.user?.shopifyCustomerIds?.[0]) {
+          if (!session?.user?.email) {
             console.warn("No Shopify customer ID found");
             setLoading(false);
             return;
@@ -125,7 +125,7 @@ const ProfilePage = () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              customerId: session.user.shopifyCustomerIds[0],
+              customerId: session.user.email,
             }),
           });
   
@@ -496,21 +496,6 @@ const ProfilePage = () => {
                   </div>
                 </div>
 
-                {/* Additional Sections */}
-                {/* <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
-                  <h4 className="text-sm sm:text-md font-semibold text-gray-900 mb-3 sm:mb-4">Account Settings</h4>
-                  <div className="space-y-2 sm:space-y-3">
-                    <button className="w-full text-left px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base">
-                      <span className="font-medium text-gray-900">Change Password</span>
-                    </button>
-                    <button className="w-full text-left px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base">
-                      <span className="font-medium text-gray-900">Privacy Settings</span>
-                    </button>
-                    <button className="w-full text-left px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base">
-                      <span className="font-medium text-gray-900">Notification Preferences</span>
-                    </button>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>

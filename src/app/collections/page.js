@@ -137,10 +137,10 @@ const CollectionsPage = () => {
                             <div className="text-2xl font-bold text-emerald-600 mb-2">500+</div>
                             <div className="text-gray-600 font-medium text-sm">Products</div>
                         </div>
-                        <div className="bg-white rounded-2xl py-4 sm:p-6 shadow-sm border border-gray-100">
+                        {/* <div className="bg-white rounded-2xl py-4 sm:p-6 shadow-sm border border-gray-100">
                             <div className="text-2xl font-bold text-emerald-600 mb-2">10K+</div>
                             <div className="text-gray-600 font-medium text-sm">Happy Customers</div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>

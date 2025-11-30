@@ -20,7 +20,7 @@ import {
 
 const AboutPage = () => {
   const stats = [
-    { number: '10,000+', label: 'Happy Customers', icon: Users },
+    // { number: '10,000+', label: 'Happy Customers', icon: Users },
     { number: '500+', label: 'Quality Products', icon: Award },
     { number: '24/7', label: 'Customer Support', icon: HeadphonesIcon },
     // { number: '150+', label: 'Cities Served', icon: MapPin }
@@ -100,7 +100,7 @@ const AboutPage = () => {
       {/* Stats Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="flex justify-center items-center gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center group">
                 <div className="bg-gradient-to-br from-emerald-500 to-teal-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">

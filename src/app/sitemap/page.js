@@ -118,7 +118,7 @@ const SitemapPage = () => {
     // Stats for trust building
     const stats = [
         { number: '500+', label: 'Products' },
-        { number: '10K+', label: 'Happy Customers' },
+        // { number: '10K+', label: 'Happy Customers' },
         { number: 'All India', label: 'Delivery' },
         { number: '24/7', label: 'Support' }
     ]

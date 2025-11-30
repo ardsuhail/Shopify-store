@@ -268,10 +268,10 @@ Note: Exchanges are subject to product availability. If your desired item is out
             >
               <button
                 onClick={() => toggleSection(section.id)}
-                className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-green-50/50 transition-colors duration-300 group"
+                className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-green-50/50 transition-colors duration-100 group"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-100">
                     {section.icon}
                   </div>
                   <div>
@@ -286,7 +286,7 @@ Note: Exchanges are subject to product availability. If your desired item is out
                     </p>
                   </div>
                 </div>
-                <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:bg-green-200">
+                <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center transition-transform duration-100 group-hover:bg-green-200">
                   {openSections[section.id] ? (
                     <ChevronUp className="w-5 h-5 text-green-600" />
                   ) : (

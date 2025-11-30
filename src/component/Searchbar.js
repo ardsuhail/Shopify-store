@@ -10,6 +10,7 @@ const Searchbar = () => {
     const [filteredProducts, setFilteredProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
+
     const [selectedCategory, setSelectedCategory] = useState("all")
     const router = useRouter()
 
@@ -154,51 +155,7 @@ const Searchbar = () => {
             </div>
 
 
-            {/* Search Results Display */}
-            {/* {isSearchOpen && searchTerm && (
-                <div className="hidden lg:block absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-2 z-40 max-h-96 overflow-y-auto">
-                    {loading ? (
-                        <div className="p-4 text-center text-gray-500">Loading...</div>
-                    ) : filteredProducts.length === 0 ? (
-                        <div className="p-4 text-center text-gray-500">No products found</div>
-                    ) : (
-                        <div className="py-2">
-                            {filteredProducts.slice(0, 8).map((product) => (
-                                <div
-                                    key={product.id}
-                                    className="px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 cursor-pointer transition-colors duration-200"
-                                    onClick={() => {
-                                        router.push(`/product/${product.id}`)
-                                        setIsSearchOpen(false)
-                                    }}
-                                >
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <h3 className="font-medium text-gray-900">{product.title}</h3>
-                                            {product.product_type && (
-                                                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                                                    {product.product_type}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <span className="text-sm text-gray-600">
-                                            ${product.variants?.[0]?.price || 'N/A'}
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
-                            {filteredProducts.length > 8 && (
-                                <div 
-                                    className="px-4 py-3 text-center text-sm text-emerald-600 border-t hover:bg-gray-50 cursor-pointer font-medium"
-                                    onClick={handleSearchSubmit}
-                                >
-                                    View all {filteredProducts.length} products
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )} */}
+
         </>
     )
 }
@@ -210,6 +167,7 @@ export const MobileSearch = () => {
     const [selectedCategory, setSelectedCategory] = useState("all")
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(false)
+    const [showAllCategories, setShowAllCategories] = useState(false);
     const router = useRouter()
 
     // Fetch products
@@ -248,6 +206,7 @@ export const MobileSearch = () => {
             handleSearchSubmit()
         }
     }
+    const visibleCategories = showAllCategories ? categories : categories.slice(0, 6);
 
     return (
         <div className="lg:hidden bg-white border-b p-3">
@@ -294,24 +253,27 @@ export const MobileSearch = () => {
 
                 {/* Quick Category Filters */}
                 <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
-                    {categories.slice(0, 6).map(category => (
+                    {visibleCategories.map(category => (
                         <button
-                        value={selectedCategory}
+                            value={selectedCategory}
                             key={category}
                             onClick={() => setSelectedCategory(category)}
                             className={`px-3 py-2 rounded-lg text-sm whitespace-nowrap transition-colors duration-200 ${selectedCategory === category
-                                    ? 'bg-emerald-500 text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                ? 'bg-emerald-500 text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                         >
                             {category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}
-                            
+
                         </button>
                     ))}
-                    {categories.length > 6 && (
-                        <span className="px-3 py-2 text-sm text-gray-500 whitespace-nowrap">
+                    {!showAllCategories && categories.length > 6 && (
+                        <button
+                            onClick={() => setShowAllCategories(true)}
+                            className="px-3 py-2 text-sm text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 whitespace-nowrap"
+                        >
                             +{categories.length - 6} more
-                        </span>
+                        </button>
                     )}
                 </div>
             </div>

@@ -10,7 +10,7 @@ const HeroSection = () => {
       .then(res => res.json())
       .then(data => {
         const activeBanners = (data.banner || []).filter(
-          (item) => item.isActive === true
+          (item) => item.isActive === true && item.position === 'top'
         );
         
         // Agar koi active banner nahi hai toh default banner use karo
