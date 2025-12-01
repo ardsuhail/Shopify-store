@@ -1,6 +1,7 @@
 import Reviews from "@/model/Reviews";
 import { v2 as cloudinary } from "cloudinary";
 import connectDB from "@/db/connectDB";
+import { NextResponse } from "next/server";
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -63,3 +64,32 @@ export async function POST(req) {
 }
 
 
+export async function GET(req) {
+    try {
+        await connectDB();
+        const url = new URL(req.url);
+        const email = url.searchParams.get('email'); // get email from query
+
+        if (!email) {
+            return NextResponse.json({
+                success: false,
+                error: true,
+                message: "Email is required",
+            }, { status: 400 });
+        }
+
+        const reviews = await Reviews.find({ email: email.toLowerCase() }).sort({ createdAt: -1 });
+        return NextResponse.json({
+            success: true,
+            error: false,
+            reviews
+        });
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({
+            success: false,
+            error: true,
+            message: 'Server Error. Please Try Again',
+        });
+    }
+}

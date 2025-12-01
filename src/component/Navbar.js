@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import Link from 'next/link'
 import { Search, Heart, User, ShoppingCart, Menu, X, ChevronDown } from 'lucide-react'
 import { useAppContext } from './Context'
@@ -17,6 +17,7 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const { data: session } = useSession()
   const router = useRouter()
+  const dropdownRef = useRef(null);
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
@@ -34,6 +35,20 @@ const Navbar = () => {
     // { name: "Blog", href: "/blog" },
     // { name: "Offers", href: "/offers" },
   ]
+
+  useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false); // agar bahar click hua to close dropdown
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
 
   return (
     <>
@@ -146,7 +161,7 @@ const Navbar = () => {
                   </span>
                 </button>
 
-                <div className="relative">
+                <div className="relative"  ref={dropdownRef} >
 
                   {session ?
                     <> <button

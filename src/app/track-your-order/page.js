@@ -128,7 +128,7 @@ export default function TrackOrderPage() {
               <input
                 id="tracking"
                 type="text"
-                placeholder="e.g., ORD123, AWB123456, or razorpay_order_id"
+                placeholder="e.g.,shov1550, AWB123456, or razorpay_order_id"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}

@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-
+import { User } from 'lucide-react'
 const ProfilePage = () => {
   const { data: session, status } = useSession({ required: true })
   const router = useRouter()
-    const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ const ProfilePage = () => {
       country: ''
     }
   })
- const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [wishlistIds, setWishlistIds] = useState([]);
@@ -73,7 +73,7 @@ const ProfilePage = () => {
       const res = await fetch('/api/profile/update', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: session.user.email,formData })
+        body: JSON.stringify({ email: session.user.email, formData })
       })
 
       const data = await res.json()
@@ -112,113 +112,131 @@ const ProfilePage = () => {
     setIsEditing(false)
   }
 
-   useEffect(() => {
-      const fetchOrders = async () => {
-        try {
-          if (!session?.user?.email) {
-            console.warn("No Shopify customer ID found");
-            setLoading(false);
-            return;
-          }
-  
-          const res = await fetch("/api/getOrders", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              customerId: session.user.email,
-            }),
-          });
-  
-          const data = await res.json();
-          console.log("📦 Orders API Response:", data);
-  
-          if (data.success) {
-            setOrders(data.orders || []);
-          } else {
-            console.error("Error:", data.error);
-          }
-        } catch (error) {
-          console.error("Fetch failed:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      if (session) {
-        fetchOrders();
+  //  useEffect(() => {
+  //     const fetchOrders = async () => {
+  //       try {
+  //         if (!session?.user?.email) {
+  //           console.warn("No Shopify customer ID found");
+  //           setLoading(false);
+  //           return;
+  //         }
+
+  //         const res = await fetch("/api/getOrders", {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify({
+  //             customerId: session.user.email,
+  //           }),
+  //         });
+
+  //         const data = await res.json();
+  //         console.log("📦 Orders API Response:", data);
+
+  //         if (data.success) {
+  //           setOrders(data.orders || []);
+  //         } else {
+  //           console.error("Error:", data.error);
+  //         }
+  //       } catch (error) {
+  //         console.error("Fetch failed:", error);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
+
+  //     if (session) {
+  //       fetchOrders();
+  //     }
+  //   }, [session]);
+
+
+  useEffect(() => {
+    setLoading(true)
+    fetch('/api/orders').then((res) => res.json()).then((data) => {
+      if (data.success) {
+        setLoading(false)
+        setOrders(data.orders)
       }
-    }, [session]);
+    }).catch((err)=>{
+       setLoading(false)
+      console.error("Fetch failed:", err);
+    })
+    // finally {
+    //   setLoading(false);
+    // }
+  }, [])
 
-      useEffect(() => {
-        if (status !== "authenticated") {
-          setLoading(false);
-          return;
+  useEffect(() => {
+    if (status !== "authenticated") {
+      setLoading(false);
+      return;
+    }
+
+    console.log("Fetching reviews for email:", session.user.email); // Debug log
+
+
+    fetch(`/api/reviews?email=${session.user.email}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
         }
-    
-        console.log("Fetching reviews for email:", session.user.email); // Debug log
-    
-        fetch(`/api/reviews?email=${session.user.email}`)
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-          })
-          .then((data) => {
-            console.log("API Response:", data); // Debug log
-            
-            // Additional client-side filtering for safety
-            const userReviews = data.reviews?.filter(review => 
-              review.email?.toLowerCase() === session.user.email.toLowerCase()
-            ) || [];
-            
-            console.log("Filtered reviews:", userReviews); // Debug log
-            setReviews(userReviews);
-            setLoading(false);
-          })
-          .catch((error) => {
-            console.error("Error fetching reviews:", error);
-            setError("Failed to load reviews");
-            setLoading(false);
-          });
-      }, [status, session]);
+        return res.json();
+      })
+      .then((data) => {
+        console.log("API Response:", data); // Debug log
 
-        useEffect(() => {
-          if (status === "loading") return;
-          
-          if (status !== "authenticated") {
-            setLoading(false);
-            return;
-          }
-      
-          const fetchWishlist = async () => {
-            try {
-              setLoading(true);
-              const res = await fetch("/api/wishlist");
-              const data = await res.json();
-              
-              console.log("Wishlist API Response:", data);
-              
-              if (data.success && data.wishlist && data.wishlist.products) {
-                const productIds = data.wishlist.products;
-                setWishlistIds(productIds);
-                
-              } else {
-                setWishlistIds([]);
-                
-              }
-            } catch (error) {
-              console.error("Failed to fetch wishlist:", error);
-              setError("Failed to load your wishlist. Please try again.");
-            } finally {
-              setLoading(false);
-            }
-          };
-      
-          fetchWishlist();
-        }, [status]);
-      
-    
+        // Additional client-side filtering for safety
+        const userReviews = data.reviews?.filter(review =>
+          review.email?.toLowerCase() === session.user.email.toLowerCase()
+        ) || [];
+
+        console.log("Filtered reviews:", userReviews); // Debug log
+        setReviews(userReviews);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching reviews:", error);
+        setError("Failed to load reviews");
+        setLoading(false);
+      });
+  }, [status, session]);
+
+  useEffect(() => {
+    if (status === "loading") return;
+
+    if (status !== "authenticated") {
+      setLoading(false);
+      return;
+    }
+
+    const fetchWishlist = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/wishlist");
+        const data = await res.json();
+
+        console.log("Wishlist API Response:", data);
+
+        if (data.success && data.wishlist && data.wishlist.products) {
+          const productIds = data.wishlist.products;
+          setWishlistIds(productIds);
+
+        } else {
+          setWishlistIds([]);
+
+        }
+      } catch (error) {
+        console.error("Failed to fetch wishlist:", error);
+        setError("Failed to load your wishlist. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWishlist();
+  }, [status]);
+
+
   if (status === "loading") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -258,11 +276,11 @@ const ProfilePage = () => {
               <div className="flex flex-col items-center mb-6">
                 <div className="relative mb-4">
                   <img
-                    src={session.user?.image || '/default-avatar.png'}
+                    src={session.user?.image || <User className='w-20 h-20' />}
                     alt="Profile"
                     className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-blue-100"
                   />
-                  <button 
+                  <button
                     className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 bg-blue-600 text-white p-1.5 sm:p-2 rounded-full hover:bg-blue-700 transition-colors"
                     aria-label="Change profile picture"
                   >
@@ -334,7 +352,7 @@ const ProfilePage = () => {
                   {/* Personal Information */}
                   <div className="space-y-4 sm:space-y-6">
                     <h4 className="text-sm sm:text-md font-semibold text-gray-900 border-b pb-2">Basic Information</h4>
-                    
+
                     <div>
                       <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Full Name</label>
                       {isEditing ? (
@@ -409,7 +427,7 @@ const ProfilePage = () => {
                   {/* Address Information */}
                   <div className="space-y-4 sm:space-y-6">
                     <h4 className="text-sm sm:text-md font-semibold text-gray-900 border-b pb-2">Address Information</h4>
-                    
+
                     <div>
                       <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Street Address</label>
                       {isEditing ? (

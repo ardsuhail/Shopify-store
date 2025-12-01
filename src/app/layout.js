@@ -21,58 +21,68 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   metadataBase: new URL("https://www.shopovix.store"),
+
   title: {
-    default: "Shopovix – Premium Online Store | Best Deals, Fast Delivery",
+    default: "Shopovix – India’s Trusted Online Store | Premium Quality, Best Prices",
     template: "%s | Shopovix"
   },
+
   description:
-    "Shopovix is your one-stop online store for premium, trending, and high-quality products. Enjoy secure checkout, fast shipping, easy returns, and 24/7 support.",
+    "Shopovix – is India’s most trusted online shopping destination for premium-quality products at unbeatable prices. Enjoy secure checkout, fast delivery across India, hassle-free returns, 24/7 support, and a seamless shopping experience you can rely on.",
+
   keywords: [
     "Shopovix",
-    "online shopping",
-    "best deals",
-    "premium store",
-    "fast delivery",
-    "ecommerce",
-    "trending products",
-    "affordable price",
-    "online store India"
+    "online shopping India",
+    "best price online store",
+    "premium products India",
+    "fast delivery shopping",
+    "trusted online store",
+    "best deals in India",
+    "ecommerce India",
+    "secure checkout shopping",
+    "Shopovix products"
   ],
+
   authors: [{ name: "Shopovix Team" }],
   creator: "Shopovix",
-  publisher: "Shopovix Store",
+  publisher: "Shopovix",
+
   formatDetection: {
     telephone: true,
     email: true,
     address: true
   },
+
   alternates: {
     canonical: "https://www.shopovix.store",
   },
+
   openGraph: {
-    title: "Shopovix – Premium Online Store | Quality Products at Best Price",
+    title: "Shopovix – Premium Online Store | Fast Delivery • Secure Checkout • Best Deals",
     description:
-      "Discover premium quality products at Shopovix. Safe checkout, fast shipping, and a trusted shopping experience.",
+      "Shop smarter with Shopovix. Discover top‑quality products, lightning‑fast delivery, secure payments, and worry‑free returns. Trusted by customers across India.",
     url: "https://www.shopovix.store",
-    siteName: "Shopovix",
+    siteName: "Shopovix – India’s Trusted Online Store",
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Shopovix Online Store",
+        alt: "Shopovix – India's Premium Online Store",
       },
     ],
     locale: "en_US",
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Shopovix – Premium Online Store",
+    title: "Shopovix – Premium Products, Fast Delivery, Trusted by India",
     description:
-      "Shopovix brings trending products at affordable prices with fast delivery and easy returns.",
+      "Shopovix brings premium-quality products at unbeatable prices. Secure checkout, fast shipping, and 24/7 customer support.",
     images: ["/opengraph-image.png"],
   },
+
   robots: {
     index: true,
     follow: true,
@@ -84,10 +94,12 @@ export const metadata = {
       "max-video-preview": -1,
     },
   },
+
   other: {
     "facebook-domain-verification": "gli3gp6h5thw6tnq36vjz6ytmtnfe1",
   }
 };
+
 
 
 export default function RootLayout({ children }) {

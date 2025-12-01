@@ -27,6 +27,7 @@ const OrderSchema = new mongoose.Schema({
   razorpayOrderId: String,
   totalAmount: Number,
   email: String,
+  phone:String,
   shipment_id: {
     type: String,
     default: ""

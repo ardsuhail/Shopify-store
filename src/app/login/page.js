@@ -38,7 +38,7 @@ const LoginPage = () => {
   const handleSignIn = async (provider) => {
     setIsLoading(true)
     try {
-      await signIn(provider, { callbackUrl: '/user' })
+      await signIn(provider, { callbackUrl: '/user/profile' })
     } catch (error) {
       console.error('Sign in error:', error)
       setIsLoading(false)

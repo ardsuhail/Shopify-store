@@ -164,13 +164,13 @@ const PremiumCheckoutPage = () => {
       // ✅ COD handling
       if (paymentMethod === "cod") {
         localStorage.setItem("orderCompleted", "true");
-        router.push(`/thank-you?name=${formData.fullName}&orderId=${data.order?.orderId}&total=${amount}&payment=COD`);
+        router.push(`/thank-you?name=${formData.fullName}&orderId=${data.order?.orderId}&total=${amount}&payment=COD&address=${formData.address}`);
         return;
       }
 
       // ✅ Razorpay handling
-      const orderID = data.order?.id; // ✅ Razorpay order ID
-
+      const razorpay_order_id = data.order?.id; // ✅ Razorpay order ID
+      const orderID=data.order?.orderId
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
         amount: Math.round(amount * 100),
@@ -178,7 +178,7 @@ const PremiumCheckoutPage = () => {
         name: "Shopovix",
         description: "Thanks for your purchase!",
         image: "https://www.shopovix.store/cdn/shop/files/Screenshot_2025-03-11_000546.png",
-        order_id: orderID,
+        order_id: razorpay_order_id,
         // ... rest of options
         // ✅ Clean handler function
         handler: async function (response) {
@@ -187,7 +187,7 @@ const PremiumCheckoutPage = () => {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                orderId: orderID,
+                razorpay_order_id: razorpay_order_id,
                 paymentId: response.razorpay_payment_id,
                 signature: response.razorpay_signature
               })
@@ -197,7 +197,8 @@ const PremiumCheckoutPage = () => {
 
             if (verifyData.success) {
               // ✅ Success - redirect to thank you page
-              router.push(`/thank-you?name=${formData.fullName}&orderId=${data.order?.orderId}&total=${grandTotal}&paymentmethod=${paymentMethod}&address=${formData.address}`);
+                router.push(`/thank-you?name=${formData.fullName}&orderId=${verifyData.orderId}&total=${grandTotal}&paymentmethod=${paymentMethod}&address=${formData.address}`);
+              // router.push(`/thank-you?name=${formData.fullName}&orderId=${data.order?.orderId}&total=${grandTotal}&paymentmethod=${paymentMethod}&address=${formData.address}`);
             } else {
               alert("Payment verification failed");
             }

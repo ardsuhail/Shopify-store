@@ -84,7 +84,7 @@ const NavSidebar = () => {
             </div>
             <div className="flex items-center gap-2 p-2 bg-purple-50 rounded-lg border border-purple-200">
               <RotateCcw className="w-3 h-3 text-purple-600" />
-              <span className="text-purple-700 font-medium">30-Day Return</span>
+              <span className="text-purple-700 font-medium">7-Day Return</span>
             </div>
           </div>
         </div>

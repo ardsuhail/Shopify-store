@@ -7,7 +7,7 @@ import { createShiprocketOrder } from "../../../../utils/shiprocket";
 import Event from "@/model/Event";
 // --- FACEBOOK CAPI for COD Purchase ---
 import crypto from "crypto";
-
+import { sendTelegramMessage } from "../../../../utils/sendTeligram";
 
 async function sendCapiForCOD(order, body) {
   try {
@@ -104,6 +104,7 @@ export async function POST(req) {
   try {
     await connectDB();
     const body = await req.json();
+
     console.log("Received order data:", body);
 
     const { paymentMethod = "COD", ...rest } = body;
@@ -164,11 +165,15 @@ export async function POST(req) {
     const orderID=await generateOrderId()
     // ✅ Handle COD Payment
     if (paymentMethod === "COD" || paymentMethod === "cod") {
+const productName = Array.isArray(body.product) 
+  ? body.product.map(p => p.title || p.product_title || "Product").join(", ")
+  : "Product";
 
       const orderData = {
         orderId:orderID,
         customer: customer._id,
         email,
+        phone:body.phone.toString(),
         customerName: body.fullName,
         customerAddress: body.address,
         products: Array.isArray(body.product) ? body.product.map(p => ({
@@ -188,6 +193,21 @@ export async function POST(req) {
     utm_medium: body.utm_medium || "",
     utm_campaign: body.utm_campaign || "",
       };
+
+      if(orderID){
+        await sendTelegramMessage(`
+   🛒 <b>NEW COD ORDER RECEIVED</b>
+   
+   👤 Name: ${body.fullName}
+   📞 Phone: ${body.phone}
+   📦 Product: ${productName}
+   💰 Amount: ₹${body.amount}
+   🏠 Address: ${body.address}
+   
+   🔥 Check admin panel now!
+     `);
+
+      }
 
       const order = await Order.create(orderData);
       const shiprocket = await createShiprocketOrder(order, customer);
@@ -247,12 +267,18 @@ export async function POST(req) {
       await Customer.findByIdAndUpdate(customer._id, {
         oid: razorpayOrder.id
       });
+
+      const productName = Array.isArray(body.product) 
+  ? body.product.map(p => p.title || p.product_title || "Product").join(", ")
+  : "Product";
+
   const orderID=await generateOrderId()
       // ✅ Create Order Record
       const orderData = {
         orderId:orderID,
         customer: customer._id,
         email,
+        phone:body.phone.toString(),
         fullName: body.fullName,
         customerName: body.fullName,
         customerAddress: body.address,
@@ -275,7 +301,23 @@ export async function POST(req) {
     utm_campaign: body.utm_campaign || "",
       };
 
+     
+
       const order = await Order.create(orderData);
+       
+      if(order.paymentStatus=='paid'){
+         await sendTelegramMessage(`
+   🛒 <b>NEW Paid ORDER RECEIVED</b>
+   
+   👤 Name: ${body.fullName}
+   📞 Phone: ${body.phone}
+   📦 Product: ${productName}
+   💰 Amount: ₹${body.amount}
+   🏠 Address: ${body.address}
+   
+   🔥 Check admin panel now!
+     `);
+      }
       const shiprocket = await createShiprocketOrder(order, customer);
       console.log("Shiprocket response:", shiprocket);
 

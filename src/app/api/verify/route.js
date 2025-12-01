@@ -2,16 +2,16 @@ import crypto from "crypto";
 import Order from "@/model/Order";
 import connectDB from "@/db/connectDB";
 import { NextResponse } from "next/server";
-
+import { sendTelegramMessage } from "../../../../utils/sendTeligram";
 export async function POST(req) {
   try {
     await connectDB();
 
     const body = await req.json();
-    const { orderId, paymentId, signature } = body;
+    const { razorpay_order_id, paymentId, signature } = body;
 
     // ✅ Basic validation
-    if (!orderId || !paymentId || !signature) {
+    if (!razorpay_order_id || !paymentId || !signature) {
       return NextResponse.json({
         success: false,
         message: "Missing payment details"
@@ -21,7 +21,7 @@ export async function POST(req) {
     // ✅ Signature verify karo
     const generatedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_SECRET)
-      .update(orderId + "|" + paymentId)
+      .update(razorpay_order_id + "|" + paymentId)
       .digest("hex");
 
     if (generatedSignature !== signature) {
@@ -31,15 +31,44 @@ export async function POST(req) {
       }, { status: 400 });
     }
 
+
+
     // ✅ Order find karo aur payment status update karo
     const updatedOrder = await Order.findOneAndUpdate(
-      { razorpayOrderId: orderId },
+      { razorpayOrderId: razorpay_order_id },
       { 
         paymentStatus: "paid"
         // orderStatus same rahega - "processing"
       },
       { new: true }
     );
+
+
+
+if (!updatedOrder) {
+    return NextResponse.json({ success: false, message: "Order not found" }, { status: 404 });
+  }
+
+  // Get product name from order
+  const productName = updatedOrder.products
+    .map(p => p.title)
+    .join(", ");
+
+  // 🔥 Ab yaha notification send hoga
+  await sendTelegramMessage(`
+    🛒 <b>NEW PAID ORDER RECEIVED</b>
+
+    👤 Name: ${updatedOrder.customerName}
+    📞 Phone: ${updatedOrder.phone}
+    📦 Product: ${productName}
+    💰 Amount: ₹${updatedOrder.totalAmount}
+    🏠 Address: ${updatedOrder.customerAddress}
+
+    ✔️ Payment Verified Successfully!
+    🔥 Check admin panel now!
+  `);
+    
+          
 
     if (!updatedOrder) {
       return NextResponse.json({ 
@@ -52,7 +81,7 @@ export async function POST(req) {
     return NextResponse.json({ 
       success: true, 
       message: "Payment successful",
-      orderId: updatedOrder._id
+      orderId: updatedOrder.orderId
     });
 
   } catch (err) {

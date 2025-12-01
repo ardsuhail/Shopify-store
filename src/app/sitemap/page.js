@@ -43,7 +43,6 @@ const SitemapPage = () => {
             links: [
                 { name: 'All Products', href: '/products', description: 'Complete product catalog' },
                 { name: 'Collections', href: '/collections', description: 'Curated product collections' },
-                { name: 'Search Products', href: '/search-result', description: 'Find specific products' },
                 { name: 'Wishlist', href: '/user/wishlist', description: 'Your saved items', auth: true },
             ]
         },
@@ -62,11 +61,10 @@ const SitemapPage = () => {
         },
         {
             id: 'checkout',
-            title: 'Checkout & Payments',
+            title: 'Payments',
             icon: <CreditCard className="w-6 h-6" />,
             description: 'Secure payment and order processing',
             links: [
-                { name: 'Checkout', href: '/checkout', description: 'Complete your purchase' },
                 { name: 'Payment Options', href: '/payment-options', description: 'Available payment methods' },
             ]
         },
@@ -77,8 +75,8 @@ const SitemapPage = () => {
             description: 'Get assistance and support',
             links: [
                 { name: 'Contact Us', href: '/contact', description: 'Get in touch with our team' },
-                { name: 'FAQs', href: '/fags', description: 'Frequently asked questions' },
-                { name: 'Customer Service', href: '/services', description: 'Our service offerings' },
+                { name: 'FAQs', href: '/faqs', description: 'Frequently asked questions' },
+                // { name: 'Customer Service', href: '/services', description: 'Our service offerings' },
             ]
         },
         {
@@ -88,7 +86,7 @@ const SitemapPage = () => {
             description: 'Information about delivery and shipping',
             links: [
                 { name: 'Shipping Information', href: '/shipping-info', description: 'Delivery timelines & costs' },
-                { name: 'Track Your Order', href: '/user/orders', description: 'Order tracking portal', auth: true },
+                { name: 'Track Your Order', href: '/track-your-order', description: 'Order tracking portal' },
             ]
         },
         {
@@ -99,7 +97,7 @@ const SitemapPage = () => {
             links: [
                 { name: 'Return & Refund Policy', href: '/return-refund-policy', description: 'Our return guidelines' },
                 { name: 'Privacy Policy', href: '/privacy-policy', description: 'Data protection policy' },
-                { name: 'Terms & Conditions', href: '/terms-conditions', description: 'Website terms of use' },
+                { name: 'Terms & Conditions', href: '/terms-&-conditions', description: 'Website terms of use' },
                 { name: 'About Us', href: '/about', description: 'Learn about our company' },
             ]
         }
@@ -111,7 +109,7 @@ const SitemapPage = () => {
         { name: 'Today\'s Deals', href: '/collections', icon: <Star className="w-5 h-5" /> },
         { name: 'Contact Support', href: '/contact', icon: <MessageCircle className="w-5 h-5" /> },
         { name: 'Track Order', href: '/user/orders', icon: <Package className="w-5 h-5" /> },
-        { name: 'FAQs', href: '/fags', icon: <HelpCircle className="w-5 h-5" /> },
+        { name: 'FAQs', href: '/faqs', icon: <HelpCircle className="w-5 h-5" /> },
         { name: 'Shipping Info', href: '/shipping-info', icon: <Truck className="w-5 h-5" /> },
     ]
 
