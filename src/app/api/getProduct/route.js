@@ -10,7 +10,7 @@ export async function GET(req) {
       return NextResponse.json({ success: false, message: "Product ID is required" }, { status: 400 });
     }
 
-    console.log("Fetching product with ID:", productId);
+    // console.log("Fetching product with ID:", productId);
 
     const product = await getProductById(productId);
 

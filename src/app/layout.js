@@ -102,14 +102,15 @@ export const metadata = {
 
 
 
-export default function RootLayout({ children }) {
+// export default function RootLayout({ children }) {
+export default function RootLayout() {
   return (
     <html lang="en">
      
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Script
+        {/* <Script
   id="fb-pixel"
   strategy="afterInteractive"
   dangerouslySetInnerHTML={{
@@ -127,19 +128,43 @@ export default function RootLayout({ children }) {
       fbq('track', 'PageView');
     `,
   }}
-/>
+/> */}
 
-        <SessionWrapper>
-        <AppProvider>
+        {/* <SessionWrapper> */}
+        {/* <AppProvider> */}
           {/* <Tracking/> */}
-        <Navbar/>
+        {/* <Navbar/>
           <NavSidebar/>
           <Cart/>
-          <TrackingWrapper/>
-        {children}
+          <TrackingWrapper/> */}
+        {/* {children}
         <Footer/>
         </AppProvider>
-        </SessionWrapper>
+        </SessionWrapper> */}
+          <div className="min-h-screen flex flex-col justify-center items-center bg-white text-gray-800 px-4">
+      
+      <div className="text-center max-w-lg">
+
+        <div className="text-6xl mb-4">🚧</div>
+
+        <h1 className="text-4xl font-bold mb-2">
+          Shopovix is Getting Ready!
+        </h1>
+
+        <p className="text-lg text-gray-500 mb-6">
+          We are working hard to bring you a premium online shopping experience.
+          Our website is currently under development and will be live very soon!
+        </p>
+
+        <p className="text-sm text-gray-400 mb-10">
+          Quality products • Fast delivery • Secure checkout
+        </p>
+      </div>
+
+      <footer className="mt-16 text-gray-300 text-sm">
+       © 2025 Shopovix — All rights reserved.
+      </footer>
+    </div>
       </body>
     </html>
   );

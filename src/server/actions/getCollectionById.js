@@ -1,7 +1,7 @@
 // server/actions/getCollectionById.js
 export async function getCollectionById(collectionId) {
     try {
-        console.log("🔍 Fetching collection by ID:", collectionId);
+        // console.log("🔍 Fetching collection by ID:", collectionId);
 
         // Call Shopify Admin API directly from the server action to avoid depending on internal API routes
         const DOMAIN = process.env.SHOPIFY_STORE_DOMAIN || process.env.MY_STORE
@@ -27,7 +27,7 @@ export async function getCollectionById(collectionId) {
         }
 
         const data = await res.json()
-        console.log('📦 Collection data from Shopify:', data)
+        // console.log('📦 Collection data from Shopify:', data)
         return data.collection || null
     } catch (error) {
         console.error('❌ Error fetching collection by ID:', error)

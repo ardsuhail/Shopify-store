@@ -17,7 +17,7 @@ export default async function CollectionPage({ params }) {
     }
 
     const products = await getProductsByCollection(id)
-    console.log("📊 Products with prices:", products)
+    // console.log("📊 Products with prices:", products)
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">

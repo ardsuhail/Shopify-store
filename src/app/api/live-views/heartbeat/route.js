@@ -28,7 +28,7 @@ export async function POST(req) {
   const serverDetectedIP = getClientIP(req);
   const finalIP = clientIPFromBody || serverDetectedIP;
 
-  console.log('💓 Heartbeat for session:', sessionId, 'IP:', finalIP);
+  // console.log('💓 Heartbeat for session:', sessionId, 'IP:', finalIP);
 
   await Session.findOneAndUpdate(
     { sessionId },

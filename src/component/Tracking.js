@@ -39,7 +39,7 @@ export default function Tracking() {
         // Client-side IP (optional)
         const clientIP = await getClientIP();
 
-        console.log('🚀 Sending track data with session:', sessionId);
+        // console.log('🚀 Sending track data with session:', sessionId);
 
         const trackResponse = await fetch("/api/live-views/track", {
           method: "POST",
@@ -57,7 +57,7 @@ export default function Tracking() {
         });
 
         const result = await trackResponse.json();
-        console.log('✅ Track response:', result);
+        // console.log('✅ Track response:', result);
 
       } catch (err) {
         console.error('❌ Track error:', err);
@@ -82,7 +82,7 @@ export default function Tracking() {
         });
 
         const result = await heartbeatResponse.json();
-        console.log('💓 Heartbeat response:', result);
+        // console.log('💓 Heartbeat response:', result);
 
       } catch (err) {
         console.error('💔 Heartbeat error:', err);

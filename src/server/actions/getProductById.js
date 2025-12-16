@@ -1,15 +1,15 @@
 // server/actions/getProductById.js
 export async function getProductById(productId) {
     try {
-        console.log("🔍 Fetching product by ID:", productId);
-        console.log("🏪 Domain:", process.env.MY_STORE);
-        console.log("🔑 Token exists:", !!process.env.SHOPIFY_TOKEN);
+        // console.log("🔍 Fetching product by ID:", productId);
+        // console.log("🏪 Domain:", process.env.MY_STORE);
+        // console.log("🔑 Token exists:", !!process.env.SHOPIFY_TOKEN);
 
         const DOMAIN = process.env.MY_STORE
         const TOKEN = process.env.SHOPIFY_TOKEN
 
-        console.log("🎯 Final Domain:", DOMAIN);
-        console.log("🎯 Final Token:", TOKEN ? "Exists" : "Missing");
+        // console.log("🎯 Final Domain:", DOMAIN);
+        // console.log("🎯 Final Token:", TOKEN ? "Exists" : "Missing");
 
         if (!DOMAIN || !TOKEN) {
             console.error('❌ Missing environment variables:', {
@@ -20,7 +20,7 @@ export async function getProductById(productId) {
         }
 
         const url = `https://${DOMAIN}/admin/api/2025-07/products/${productId}.json`;
-        console.log("🌐 Request URL:", url);
+        // console.log("🌐 Request URL:", url);
 
         const res = await fetch(url, {
             headers: {
@@ -30,8 +30,8 @@ export async function getProductById(productId) {
             cache: 'no-store' // Use this instead of next: { revalidate: 0 }
         })
 
-        console.log("📡 Response Status:", res.status);
-        console.log("📡 Response OK:", res.ok);
+        // console.log("📡 Response Status:", res.status);
+        // console.log("📡 Response OK:", res.ok);
 
         if (!res.ok) {
             const errText = await res.text();
@@ -40,8 +40,8 @@ export async function getProductById(productId) {
         }
 
         const data = await res.json();
-        console.log('📦 FULL response from Shopify:', data);
-        console.log('🎯 Product data:', data.product);
+        // console.log('📦 FULL response from Shopify:', data);
+        // console.log('🎯 Product data:', data.product);
         
         return data.product || null;
     } catch (error) {

@@ -28,8 +28,8 @@ export default async function Page({ params }) {
     if (!product) {
         return notFound()
     }
-    console.log('📦 Product images:', product.images)
-    console.log('🖼️ Image structure:', product.image)
+    // console.log('📦 Product images:', product.images)
+    // console.log('🖼️ Image structure:', product.image)
     // Temporary test - multiple images manually add karo
 
 

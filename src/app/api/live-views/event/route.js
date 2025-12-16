@@ -6,13 +6,13 @@ export async function POST(req) {
   try {
     await connectDB();
     const body = await req.json();
-    console.log('🎯 Event API received:', body);
+    // console.log('🎯 Event API received:', body);
     
     const { sessionId, type, payload = {}, utm = {}, fbclid = "" } = body;
 
     // Validate required fields
     if (!sessionId || !type) {
-      console.log('❌ Missing required fields:', { sessionId, type });
+      // console.log('❌ Missing required fields:', { sessionId, type });
       return new Response(JSON.stringify({ 
         success: false, 
         error: "sessionId and type are required" 
@@ -29,11 +29,11 @@ export async function POST(req) {
       createdAt: new Date() // Explicitly add createdAt
     };
 
-    console.log('💾 Creating event with data:', eventData);
+    // console.log('💾 Creating event with data:', eventData);
 
     const event = await Event.create(eventData);
 
-    console.log('✅ Event created successfully:', event._id);
+    // console.log('✅ Event created successfully:', event._id);
 
     return new Response(JSON.stringify({ 
       success: true,

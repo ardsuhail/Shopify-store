@@ -30,7 +30,7 @@ const CollectionsPage = () => {
             try {
                 setLoading(true)
                 const data = await getCollections();
-                console.log("📦 All collections received:", data);
+                // console.log("📦 All collections received:", data);
                 
                 // Filter out unwanted collections
                 const filteredData = data.filter(item => 

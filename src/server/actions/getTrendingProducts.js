@@ -49,7 +49,7 @@ async function getTrendingProducts() {
     const productIds = collectsData.collects.map((c) => c.product_id);
 
     if (productIds.length === 0) {
-      console.log("No products in featured collection!");
+      // console.log("No products in featured collection!");
       return [];
     }
 

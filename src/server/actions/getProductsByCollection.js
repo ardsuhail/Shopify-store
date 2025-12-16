@@ -5,7 +5,7 @@ const TOKEN = process.env.SHOPIFY_TOKEN;
 
 export async function getProductsByCollection(collectionId) {
     try {
-        console.log("🛒 Fetching products for collection ID:", collectionId);
+        // console.log("🛒 Fetching products for collection ID:", collectionId);
 
         // Step 1: Get product IDs in this collection using collects endpoint
         const collectsRes = await fetch(
@@ -28,7 +28,7 @@ export async function getProductsByCollection(collectionId) {
         const productIds = collectsData.collects.map((c) => c.product_id);
 
         if (productIds.length === 0) {
-            console.log("No products in this collection!");
+            // console.log("No products in this collection!");
             return [];
         }
 
@@ -50,7 +50,7 @@ export async function getProductsByCollection(collectionId) {
         }
 
         const productsData = await productsRes.json();
-        console.log("📦 Products with prices:", productsData.products);
+        // console.log("📦 Products with prices:", productsData.products);
         
         return productsData.products || [];
     } catch (error) {

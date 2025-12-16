@@ -13,7 +13,7 @@ export async function getShiprocketToken() {
 
     return res.data.token;
   } catch (err) {
-    console.log("Shiprocket Token Error:", err.response?.data);
+    // console.log("Shiprocket Token Error:", err.response?.data);
     return null;
   }
 }
@@ -68,7 +68,7 @@ export async function createShiprocketOrder(order, customer) {
 
     return res.data;
   } catch (err) {
-    console.log("Shiprocket Order Error:", err.response?.data);
+    // console.log("Shiprocket Order Error:", err.response?.data);
     return null;
   }
 }

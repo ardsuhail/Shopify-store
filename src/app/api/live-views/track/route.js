@@ -20,7 +20,7 @@ function getClientIP(req) {
 
 // Better Geolocation with multiple fallbacks
 async function getLocationFromIP(ip) {
-  console.log('📍 Getting location for IP:', ip);
+  // console.log('📍 Getting location for IP:', ip);
   
   // Localhost ke liye demo data
   if (ip === '::1' || ip === '127.0.0.1' || ip === 'localhost') {

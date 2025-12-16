@@ -6,7 +6,7 @@ const TOKEN = process.env.SHOPIFY_TOKEN;
 export async function getCollectionsForProduct(productId) {
   try {
     if (!productId) return [];
-    console.log("🧭 Fetching collections for product:", productId);
+    // console.log("🧭 Fetching collections for product:", productId);
 
     const res = await fetch(
       `https://${STORE}/admin/api/2025-07/collects.json?product_id=${productId}`,
@@ -26,7 +26,7 @@ export async function getCollectionsForProduct(productId) {
 
     const data = await res.json();
     const collectionIds = (data.collects || []).map((c) => c.collection_id).filter(Boolean);
-    console.log("🔎 Collections found for product:", collectionIds);
+    // console.log("🔎 Collections found for product:", collectionIds);
     return collectionIds;
   } catch (err) {
     console.error("Error fetching collections for product:", err);
