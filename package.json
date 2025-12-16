@@ -14,7 +14,7 @@
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.552.0",
     "mongoose": "^8.19.3",
-    "next": "^15.5.4",
+    "next": "^16.0.10",
     "next-auth": "^4.24.13",
     "nodemailer": "^7.0.11",
     "razorpay": "^2.9.6",
